@@ -5,33 +5,48 @@ import java.util.ArrayList;
 public class Character {
 
     private String name;
-    private Object settlement;
-    private Job job;
-    private String[] attitude;
+    private int age;
+    private Settlement settlement;
+    private Profession profession;
+    private String[] generalAttitude;
     private String[] strengths;
     private String[] weaknesses;
-    private ArrayList<Character> relationships;
+    private ArrayList<Character> relatedCharacters;
     private ArrayList<Item> items;
+    private String comments;
 
     public Character(
             String characterName,
-            Object characterSettlement,
-            Job characterJob,
-            String[] characterAttitudes,
+            int characterAge,
+            Settlement characterSettlement,
+            Profession characterProfession,
+            String[] characterGeneralAttitude,
             String[] characterStrengths,
             String[] characterWeaknesses,
-            ArrayList<Character> characterRelationships,
-            ArrayList<Item> characterItems
+            ArrayList<Character> characterRelatedCharacters,
+            ArrayList<Item> characterItems,
+            String characterComments
     ) {
 
         name = characterName;
+        age = characterAge;
         settlement = characterSettlement;
-        job = characterJob;
-        attitude = characterAttitudes;
+        profession = characterProfession;
+        generalAttitude = characterGeneralAttitude;
         strengths = characterStrengths;
         weaknesses = characterWeaknesses;
-        relationships = characterRelationships;
+        relatedCharacters = characterRelatedCharacters;
         items = characterItems;
+        comments = characterComments;
+    }
+
+    public void DBInsert(Character character) {
+    }
+
+    public void DBUpdate(Character characterOld, Character characterNew) {
+    }
+
+    public void DBDelete(Character character) {
     }
 
 }

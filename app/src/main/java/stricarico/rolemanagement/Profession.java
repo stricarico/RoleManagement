@@ -1,11 +1,11 @@
 package stricarico.rolemanagement;
 
-public class Job {
+public class Profession {
 
     private String name;
     private String duties;
 
-    public Job (String jobName, String jobDuties) {
+    public Profession(String jobName, String jobDuties) {
         name = jobName;
         duties = jobDuties;
     }
@@ -24,6 +24,15 @@ public class Job {
 
     public void setDuties(String setterDuties) {
         duties = setterDuties;
+    }
+
+    public void DBInsert(Profession profession) {
+    }
+
+    public void DBUpdate(Profession professionOld, Profession professionNew) {
+    }
+
+    public void DBDelete(Profession profession) {
     }
 
 }
