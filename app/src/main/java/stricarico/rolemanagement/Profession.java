@@ -2,6 +2,8 @@ package stricarico.rolemanagement;
 
 public class Profession {
 
+    private static final String tableName = "PROFESSION";
+
     private String name;
     private String duties;
 

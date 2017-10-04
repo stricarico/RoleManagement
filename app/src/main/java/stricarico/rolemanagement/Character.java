@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class Character {
 
+    private static final String tableName = "CHARACTER";
+
     private String name;
     private int age;
     private Settlement settlement;
@@ -32,21 +34,44 @@ public class Character {
         age = characterAge;
         settlement = characterSettlement;
         profession = characterProfession;
-        generalAttitude = characterGeneralAttitude;
-        strengths = characterStrengths;
-        weaknesses = characterWeaknesses;
+        generalAttitude = characterGeneralAttitude.clone();
+        strengths = characterStrengths.clone();
+        weaknesses = characterWeaknesses.clone();
         relatedCharacters = characterRelatedCharacters;
         items = characterItems;
         comments = characterComments;
     }
 
-    public void DBInsert(Character character) {
+    public void dbInsert(Character character) {
     }
 
-    public void DBUpdate(Character characterOld, Character characterNew) {
+    public void dbUpdate(Character characterOld, Character characterNew) {
     }
 
-    public void DBDelete(Character character) {
+    public void dbDelete(Character character) {
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public Settlement getSettlement() {
+        return settlement;
+    }
+
+    public void setSettlement(Settlement settlement) {
+        this.settlement = settlement;
+    }
 }

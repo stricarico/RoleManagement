@@ -2,11 +2,13 @@ package stricarico.rolemanagement;
 
 public class Settlement {
 
+    private static final String tableName = "SETTLEMENT";
+
     private String name;
     private int type;
     private int population;
 
-    public Settlement (
+    public Settlement(
             String settlementName,
             int settlementType,
             int settlementPopulation
@@ -16,37 +18,24 @@ public class Settlement {
         population = settlementPopulation;
     }
 
-    public String getName() {
-        return name;
+    public void dbInsert(Settlement settlement) {
     }
 
-    public void setName(String setterName) {
-        name =  setterName;
+    public void dbUpdate(Settlement settlementOld, Settlement settlementNew) {
     }
 
-    public int getType() {
-        return type;
+    public void dbDelete(Settlement settlement) {
     }
 
-    public void setType(int setterType) {
-        type = setterType;
-    }
+    public String getName() { return name; }
 
-    public int getPopulation() {
-        return population;
-    }
+    public void setName(String name) { name = this.name; }
 
-    public void setPopulation(int setterPopulation) {
-        population = setterPopulation;
-    }
+    public int getType() { return type; }
 
-    public void DBInsert(Settlement settlement) {
-    }
+    public void setType(int type) { type = this.type; }
 
-    public void DBUpdate(Settlement settlementOld, Settlement settlementNew) {
-    }
+    public int getPopulation() { return population; }
 
-    public void DBDelete(Settlement settlement) {
-    }
-
+    public void setPopulation(int population) { this.population = population; }
 }
