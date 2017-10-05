@@ -1,6 +1,8 @@
 package stricarico.rolemanagement;
 
-public class Settlement {
+import android.content.ContentValues;
+
+public class Settlement extends ORPPersistentObject {
 
     private static final String tableName = "SETTLEMENT";
 
@@ -38,4 +40,9 @@ public class Settlement {
     public int getPopulation() { return population; }
 
     public void setPopulation(int population) { this.population = population; }
+
+    @Override
+    public ContentValues dataInsertionValues() {
+        return null;
+    }
 }

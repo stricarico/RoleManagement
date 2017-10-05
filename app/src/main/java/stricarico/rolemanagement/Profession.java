@@ -1,6 +1,8 @@
 package stricarico.rolemanagement;
 
-public class Profession {
+import android.content.ContentValues;
+
+public class Profession extends ORPPersistentObject {
 
     private static final String tableName = "PROFESSION";
 
@@ -37,4 +39,8 @@ public class Profession {
     public void DBDelete(Profession profession) {
     }
 
+    @Override
+    public ContentValues dataInsertionValues() {
+        return null;
+    }
 }

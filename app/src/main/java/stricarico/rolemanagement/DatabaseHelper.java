@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL(Character.tableCreationString());
     }
 
     @Override
@@ -27,5 +27,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static synchronized DatabaseHelper getCurrent(Context context) {
         if (current == null) current = new DatabaseHelper(context);
         return current;
+    }
+
+    public long dbInsert(ORPPersistentObject object) {
+        return db.insert(object.getTableName(), null, object.dataInsertionValues());
     }
 }
