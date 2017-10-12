@@ -2,7 +2,7 @@ package stricarico.rolemanagement;
 
 import android.content.ContentValues;
 
-public abstract class ORPPersistentObject {
+public abstract class AbstractPersistentObject {
 
     private long id;
     private String tableName;

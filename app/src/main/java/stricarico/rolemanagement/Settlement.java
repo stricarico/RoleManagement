@@ -2,7 +2,7 @@ package stricarico.rolemanagement;
 
 import android.content.ContentValues;
 
-public class Settlement extends ORPPersistentObject {
+public class Settlement extends AbstractPersistentObject {
 
     private static final String tableName = "SETTLEMENT";
 

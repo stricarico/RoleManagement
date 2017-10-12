@@ -3,10 +3,13 @@ package stricarico.rolemanagement;
 import android.content.ContentValues;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
-public class Character extends ORPPersistentObject {
+public class Character extends AbstractPersistentObject {
 
+    private long id;
     private String name;
+    private Date ts;
     private int age;
     private Settlement settlement;
     private Profession profession;
@@ -18,6 +21,7 @@ public class Character extends ORPPersistentObject {
 
     public Character(
             String characterName,
+            Date characterTS,
             int characterAge,
             Settlement characterSettlement,
             Profession characterProfession,
@@ -27,26 +31,26 @@ public class Character extends ORPPersistentObject {
             ArrayList<Character> characterRelatedCharacters,
             String characterComments
     ) {
-        name = characterName;
-        age = characterAge;
-        settlement = characterSettlement;
-        profession = characterProfession;
-        generalAttitude = characterGeneralAttitude;
-        strengths = characterStrengths;
-        weaknesses = characterWeaknesses;
-        relatedCharacters = characterRelatedCharacters;
-        comments = characterComments;
+        this.name = characterName;
+        this.ts = characterTS;
+        this.age = characterAge;
+        this.settlement = characterSettlement;
+        this.profession = characterProfession;
+        this.generalAttitude = characterGeneralAttitude;
+        this.strengths = characterStrengths;
+        this.weaknesses = characterWeaknesses;
+        this.relatedCharacters = characterRelatedCharacters;
+        this.comments = characterComments;
 
-        setTableName("CHARACTER");
+        this.setTableName("CHARACTER");
     }
 
-    public void dbInsert(Character character) {
+    public long getID() {
+        return id;
     }
 
-    public void dbUpdate(Character characterOld, Character characterNew) {
-    }
-
-    public void dbDelete(Character character) {
+    public void setID(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -54,6 +58,14 @@ public class Character extends ORPPersistentObject {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getTS() {
+        return ts;
+    }
+
+    public void setTS(Date ts) {
+        this.ts = ts;
     }
 
     public int getAge() {
@@ -75,6 +87,7 @@ public class Character extends ORPPersistentObject {
         String table;
         table = "CREATE TABLE CHARACTER (" +
                 "ID                         INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "TS                         DATE," +
                 "NAME                       TEXT," +
                 "AGE                        INT," +
                 "SETTLEMENT_ID              INTEGER," +

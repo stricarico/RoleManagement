@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return current;
     }
 
-    public long dbInsert(ORPPersistentObject object) {
+    public long dbInsert(AbstractPersistentObject object) {
         return db.insert(object.getTableName(), null, object.dataInsertionValues());
     }
 }

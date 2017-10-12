@@ -2,7 +2,7 @@ package stricarico.rolemanagement;
 
 import android.content.ContentValues;
 
-public class Profession extends ORPPersistentObject {
+public class Profession extends AbstractPersistentObject {
 
     private static final String tableName = "PROFESSION";
 
