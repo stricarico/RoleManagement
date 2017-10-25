@@ -1,15 +1,16 @@
 package stricarico.rolemanagement;
 
 import android.content.ContentValues;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+
 
 public class Character extends AbstractPersistentObject {
 
     private long id;
+    private Timestamp ts;
     private String name;
-    private Date ts;
     private int age;
     private Settlement settlement;
     private Profession profession;
@@ -17,22 +18,19 @@ public class Character extends AbstractPersistentObject {
     private String strengths;
     private String weaknesses;
     private ArrayList<Character> relatedCharacters;
-    private String comments;
 
     public Character(
             String characterName,
-            Date characterTS,
             int characterAge,
             Settlement characterSettlement,
             Profession characterProfession,
             String[] characterGeneralAttitude,
             String characterStrengths,
             String characterWeaknesses,
-            ArrayList<Character> characterRelatedCharacters,
-            String characterComments
+            ArrayList<Character> characterRelatedCharacters
     ) {
+        this.ts = new Timestamp(System.currentTimeMillis());
         this.name = characterName;
-        this.ts = characterTS;
         this.age = characterAge;
         this.settlement = characterSettlement;
         this.profession = characterProfession;
@@ -40,7 +38,6 @@ public class Character extends AbstractPersistentObject {
         this.strengths = characterStrengths;
         this.weaknesses = characterWeaknesses;
         this.relatedCharacters = characterRelatedCharacters;
-        this.comments = characterComments;
 
         this.setTableName("CHARACTER");
     }
@@ -48,7 +45,6 @@ public class Character extends AbstractPersistentObject {
     public long getID() {
         return id;
     }
-
     public void setID(long id) {
         this.id = id;
     }
@@ -60,11 +56,10 @@ public class Character extends AbstractPersistentObject {
         this.name = name;
     }
 
-    public Date getTS() {
+    public Timestamp getTS() {
         return ts;
     }
-
-    public void setTS(Date ts) {
+    public void setTS(Timestamp ts) {
         this.ts = ts;
     }
 
@@ -97,8 +92,8 @@ public class Character extends AbstractPersistentObject {
                 "FRIENDLY_ATTITUDE          TEXT," +
                 "STRENGTHS                  TEXT," +
                 "WEAKNESSES                 TEXT," +
-                "RELATED_CHARACTERS_IDS     TEXT," +
-                "COMMENTS                   TEXT)";
+                "RELATED_CHARACTERS_IDS     TEXT)";
+
         return table;
     }
 
@@ -115,6 +110,7 @@ public class Character extends AbstractPersistentObject {
         String relatedCharactersString = Arrays.toString(relatedCharactersIDS);
         relatedCharactersString = relatedCharactersString.substring(1, relatedCharactersString.length() -1);
 
+        contentValues.put("TS", this.ts.getTime());
         contentValues.put("NAME", this.name);
         contentValues.put("AGE", this.age);
         contentValues.put("SETTLEMENT_ID", this.settlement.getId());
@@ -125,7 +121,6 @@ public class Character extends AbstractPersistentObject {
         contentValues.put("STRENGTHS", this.strengths);
         contentValues.put("WEAKNESSES", this.weaknesses);
         contentValues.put("RELATED_CHARACTERS_IDS", relatedCharactersString);
-        contentValues.put("COMMENTS", this.comments);
 
         return contentValues;
     }

@@ -8,8 +8,24 @@
             android:title="@string/home" />
         <item
             android:id="@+id/fragmentCharacter"
-            android:icon="@drawable/ic_people_black_24dp"
+            android:icon="@drawable/ic_character_black_24dp"
             android:title="@string/characters" />
+        <item
+            android:id="@+id/fragmentSettlement"
+            android:icon="@drawable/ic_settlement_black_24dp"
+            android:title="@string/settlements" />
+        <item
+            android:id="@+id/fragmentProfession"
+            android:icon="@drawable/ic_profession_black_24dp"
+            android:title="@string/professions" />
+        <item
+            android:id="@+id/fragmentQuest"
+            android:icon="@drawable/ic_quest_black_24dp"
+            android:title="@string/quests" />
+        <item
+            android:id="@+id/fragmentItem"
+            android:icon="@drawable/ic_item_black_24dp"
+            android:title="@string/items" />
     </group>
 
 </menu>

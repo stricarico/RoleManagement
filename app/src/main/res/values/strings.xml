@@ -8,4 +8,27 @@
     <string name="home">Inicio</string>
     <string name="title_activity_character">Nuevo Personaje</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="character_name">Nombre</string>
+    <string name="character_age">Edad</string>
+    <string name="character_hostile_attitude">Actitud hostil</string>
+    <string name="character_indifferent_attitude">Actitud indiferente</string>
+    <string name="character_friendly_attitude">Actitud amistosa</string>
+    <string name="character_strengths">Fortalezas</string>
+    <string name="character_weaknesses">Debilidades</string>
+    <string name="character_tab_general">GENERAL</string>
+    <string name="settlements">Asentamientos</string>
+    <string name="professions">Profesiones</string>
+    <string name="quests">Misiones</string>
+    <string name="items">Objetos</string>
+    <string name="title_activity_settlement">SettlementActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="settlement_name">Nombre</string>
+    <string name="settlement_population">Población</string>
+    <string name="ok_button">GUARDAR</string>
+
+    <string-array name="type_names">
+        <item>Aldea</item>
+        <item>Pueblo</item>
+        <item>Ciudad</item>
+    </string-array>
 </resources>
