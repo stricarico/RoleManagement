@@ -9,20 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class SettlementFragment extends Fragment {
 
-    private List<ListItem> listItems;
+    private List<Settlement> listItems;
     private ListAdapter listAdapter;
     private RecyclerView recyclerView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.settlement_fragment, container, false);
-
-        listItems = getItemsToList();
 
         recyclerView = view.findViewById(R.id.settlementRecyclerView);
 
@@ -43,35 +39,37 @@ public class SettlementFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private List<ListItem> getItemsToList() {
-
-        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
-
-        List<Settlement> listSettlements = rma.getDB().dbSelectAllSettlements();
-        List<ListItem> listItems = new ArrayList<>();
-
-        for(int i=0; i<listSettlements.size(); i++) {
-            ListItem listItem = new ListItem(
-                    listSettlements.get(i).getName(),
-                    String.valueOf(listSettlements.get(i).getType()),
-                    String.valueOf(listSettlements.get(i).getPopulation()) + " habitantes"
-            );
-
-            listItems.add(listItem);
-        }
-
-        return listItems;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
 
         listItems = getItemsToList();
 
-        listAdapter = new ListAdapter(listItems, this.getContext());
+        listAdapter = new ListAdapter(listItems, this);
         recyclerView.setAdapter(listAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    private List<Settlement> getItemsToList() {
+
+        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+
+        List<Settlement> listSettlements = rma.getDB().dbSelectAllSettlements();
+
+        return listSettlements;
+    }
+
+    public void updateItemAtPosition(int position) {
+
+    }
+
+    public void deleteItemAtPosition(int position) {
+
+        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+        Settlement settlementToDelete = listAdapter.getItem(position);
+        rma.getDB().dbDeleteById(settlementToDelete.getTableName(), String.valueOf(settlementToDelete.getId()));
+
+        onResume();
     }
 }

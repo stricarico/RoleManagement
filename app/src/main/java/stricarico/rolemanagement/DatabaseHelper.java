@@ -55,6 +55,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(object.getTableName(), null, object.dataInsertionValues());
     }
 
+    public void dbDeleteById(String table, String id){
+        db.delete(table, "ID=?", new String[]{id});
+    }
+
     public List<Settlement> dbSelectAllSettlements() {
 
         String query = "SELECT * FROM SETTLEMENT ORDER BY NAME ASC";
