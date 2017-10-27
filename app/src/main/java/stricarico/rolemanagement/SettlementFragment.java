@@ -15,26 +15,16 @@ import java.util.List;
 
 public class SettlementFragment extends Fragment {
 
+    private List<ListItem> listItems;
+    private ListAdapter listAdapter;
+    private RecyclerView recyclerView;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.settlement_fragment, container, false);
 
-        List<ListItem> listItems = new ArrayList<>();
+        listItems = getItemsToList();
 
-        for(int i=0; i<=10; i++) {
-            ListItem listItem = new ListItem(
-                    "Settlement " + i+1,
-                    "Type",
-                    "Population is " + (i+1)*1000
-            );
-
-            listItems.add(listItem);
-        }
-
-        RecyclerView recyclerView = view.findViewById(R.id.settlementRecyclerView);
-        ListAdapter listAdapter = new ListAdapter(listItems, this.getContext());
-        recyclerView.setAdapter(listAdapter);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView = view.findViewById(R.id.settlementRecyclerView);
 
         FloatingActionButton fab = view.findViewById(R.id.newSettlement);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -51,5 +41,37 @@ public class SettlementFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private List<ListItem> getItemsToList() {
+
+        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+
+        List<Settlement> listSettlements = rma.getDB().dbSelectAllSettlements();
+        List<ListItem> listItems = new ArrayList<>();
+
+        for(int i=0; i<listSettlements.size(); i++) {
+            ListItem listItem = new ListItem(
+                    listSettlements.get(i).getName(),
+                    String.valueOf(listSettlements.get(i).getType()),
+                    String.valueOf(listSettlements.get(i).getPopulation()) + " habitantes"
+            );
+
+            listItems.add(listItem);
+        }
+
+        return listItems;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        listItems = getItemsToList();
+
+        listAdapter = new ListAdapter(listItems, this.getContext());
+        recyclerView.setAdapter(listAdapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
     }
 }

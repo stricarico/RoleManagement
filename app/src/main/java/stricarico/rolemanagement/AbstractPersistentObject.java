@@ -4,24 +4,24 @@ import android.content.ContentValues;
 
 public abstract class AbstractPersistentObject {
 
-    private long id;
-    private String tableName;
+    private Long id;
+    private Long ts;
 
-    public long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getTableName() {
-        return tableName;
+    public Long getTs() {
+        return ts;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setTs(Long ts) {
+        this.ts = ts;
     }
+
+    public abstract String getTableName();
 
     public abstract ContentValues dataInsertionValues();
 }

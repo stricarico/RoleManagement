@@ -8,8 +8,8 @@ import java.util.Arrays;
 
 public class Character extends AbstractPersistentObject {
 
-    private long id;
-    private Timestamp ts;
+    private static final String tableName = "CHARACTER";
+
     private String name;
     private int age;
     private Settlement settlement;
@@ -29,7 +29,6 @@ public class Character extends AbstractPersistentObject {
             String characterWeaknesses,
             ArrayList<Character> characterRelatedCharacters
     ) {
-        this.ts = new Timestamp(System.currentTimeMillis());
         this.name = characterName;
         this.age = characterAge;
         this.settlement = characterSettlement;
@@ -38,15 +37,6 @@ public class Character extends AbstractPersistentObject {
         this.strengths = characterStrengths;
         this.weaknesses = characterWeaknesses;
         this.relatedCharacters = characterRelatedCharacters;
-
-        this.setTableName("CHARACTER");
-    }
-
-    public long getID() {
-        return id;
-    }
-    public void setID(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -54,13 +44,6 @@ public class Character extends AbstractPersistentObject {
     }
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Timestamp getTS() {
-        return ts;
-    }
-    public void setTS(Timestamp ts) {
-        this.ts = ts;
     }
 
     public int getAge() {
@@ -98,6 +81,11 @@ public class Character extends AbstractPersistentObject {
     }
 
     @Override
+    public String getTableName() {
+        return tableName;
+    }
+
+    @Override
     public ContentValues dataInsertionValues() {
 
         ContentValues contentValues = new ContentValues();
@@ -110,7 +98,7 @@ public class Character extends AbstractPersistentObject {
         String relatedCharactersString = Arrays.toString(relatedCharactersIDS);
         relatedCharactersString = relatedCharactersString.substring(1, relatedCharactersString.length() -1);
 
-        contentValues.put("TS", this.ts.getTime());
+        contentValues.put("TS", System.currentTimeMillis());
         contentValues.put("NAME", this.name);
         contentValues.put("AGE", this.age);
         contentValues.put("SETTLEMENT_ID", this.settlement.getId());

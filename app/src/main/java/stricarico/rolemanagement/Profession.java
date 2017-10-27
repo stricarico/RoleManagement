@@ -40,6 +40,11 @@ public class Profession extends AbstractPersistentObject {
     }
 
     @Override
+    public String getTableName() {
+        return tableName;
+    }
+
+    @Override
     public ContentValues dataInsertionValues() {
         return null;
     }

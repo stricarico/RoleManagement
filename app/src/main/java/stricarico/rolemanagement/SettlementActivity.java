@@ -1,12 +1,8 @@
 package stricarico.rolemanagement;
 
-import android.app.Application;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +36,7 @@ public class SettlementActivity extends AppCompatActivity {
                 int population = Integer.parseInt(etPopulation.getText().toString());
 
                 saveSettlement(name, type, population);
+                finish();
             }
         });
     }
@@ -48,7 +45,7 @@ public class SettlementActivity extends AppCompatActivity {
         Settlement settlement = new Settlement(name, type, population);
 
         RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
-        rma.getDB().dbInsert(settlement);
+        settlement.setId(rma.getDB().dbInsert(settlement));
     }
 
 }
