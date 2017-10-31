@@ -24,7 +24,8 @@
     <string name="action_settings">Settings</string>
     <string name="settlement_name">Nombre</string>
     <string name="settlement_population">Población</string>
-    <string name="ok_button">GUARDAR</string>
+    <string name="insert_button">GUARDAR</string>
+    <string name="update_button">MODIFICAR</string>
 
     <string-array name="type_names">
         <item>Aldea</item>

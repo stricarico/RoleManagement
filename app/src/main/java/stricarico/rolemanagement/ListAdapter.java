@@ -76,12 +76,15 @@ public class ListAdapter extends RecyclerView.Adapter {
                     break;
             }
 
-            //textViewType.setText(listItem.getType());
             textViewPopulation.setText(String.valueOf(position));
+
+            buttonUpdate.setBackgroundResource(R.drawable.ic_edit_black_24dp);
+            buttonDelete.setBackgroundResource(R.drawable.ic_delete_black_24dp);
 
             buttonUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    fragment.updateItemAtPosition(position);
                 }
             });
 
@@ -92,9 +95,6 @@ public class ListAdapter extends RecyclerView.Adapter {
                     listItems.remove(position);
                 }
             });
-
-            //buttonEdit.setBackground();
-            //buttonDelete.setBackground();
         }
 
         public void onClick(View view) {

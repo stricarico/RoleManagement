@@ -62,6 +62,11 @@ public class SettlementFragment extends Fragment {
 
     public void updateItemAtPosition(int position) {
 
+        String id = String.valueOf(listAdapter.getItem(position).getId());
+
+        Intent resultIntent = new Intent(getActivity(), SettlementActivity.class);
+        resultIntent.putExtra("id", id);
+        startActivity(resultIntent);
     }
 
     public void deleteItemAtPosition(int position) {

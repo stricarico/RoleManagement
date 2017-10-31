@@ -7,7 +7,6 @@ public class Settlement extends AbstractPersistentObject {
 
     private static final String tableName = "SETTLEMENT";
 
-    private Long id;
     private String name;
     private int type;
     private int population;
@@ -23,10 +22,14 @@ public class Settlement extends AbstractPersistentObject {
     }
 
     public String getName() { return name; }
-    public void setName(String name) { name = this.name; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public int getType() { return type; }
-    public void setType(int type) { type = this.type; }
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public int getPopulation() { return population; }
     public void setPopulation(int population) { this.population = population; }
@@ -55,6 +58,17 @@ public class Settlement extends AbstractPersistentObject {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put("TS", System.currentTimeMillis());
+        contentValues.put("NAME", this.name);
+        contentValues.put("TYPE", this.type);
+        contentValues.put("POPULATION", this.population);
+
+        return contentValues;
+    }
+
+    public ContentValues dataUpdateValues() {
+
+        ContentValues contentValues = new ContentValues();
+
         contentValues.put("NAME", this.name);
         contentValues.put("TYPE", this.type);
         contentValues.put("POPULATION", this.population);
