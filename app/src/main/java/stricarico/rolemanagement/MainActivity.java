@@ -53,6 +53,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.fragmentSettlement:
                 fragment = new SettlementFragment();
                 break;
+            case R.id.fragmentProfession:
+                fragment = new ProfessionFragment();
+                break;
         }
 
         if (fragment != null) {

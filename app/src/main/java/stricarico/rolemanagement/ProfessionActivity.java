@@ -3,28 +3,24 @@ package stricarico.rolemanagement;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
-public class SettlementActivity extends AppCompatActivity {
+public class ProfessionActivity extends AppCompatActivity {
 
     private static Bundle bundle;
 
-    private Spinner spinner;
     private EditText etName;
-    private EditText etPopulation;
+    private EditText etDuties;
     private Button insertButton;
     private Button updateButton;
 
-    private ArrayAdapter<CharSequence> adapter;
-    private Settlement settlement;
+    private Profession profession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settlement);
+        setContentView(R.layout.activity_profession);
 
         insertButton = (Button) findViewById(R.id.insertButton);
         updateButton = (Button) findViewById(R.id.updateButton);
@@ -33,13 +29,12 @@ public class SettlementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                settlement = new Settlement(
+                profession = new Profession(
                         etName.getText().toString(),
-                        spinner.getSelectedItemPosition(),
-                        Integer.parseInt(etPopulation.getText().toString())
+                        etDuties.getText().toString()
                 );
 
-                saveSettlement(settlement);
+                saveProfession(profession);
                 finish();
             }
         });
@@ -48,11 +43,10 @@ public class SettlementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                settlement.setName(etName.getText().toString());
-                settlement.setType(spinner.getSelectedItemPosition());
-                settlement.setPopulation(Integer.parseInt(etPopulation.getText().toString()));
+                profession.setName(etName.getText().toString());
+                profession.setDuties(etDuties.getText().toString());
 
-                updateSettlement(settlement);
+                updateProfession(profession);
                 finish();
             }
         });
@@ -63,14 +57,9 @@ public class SettlementActivity extends AppCompatActivity {
         super.onResume();
 
         bundle = getIntent().getExtras();
-        spinner = (Spinner) findViewById(R.id.type);
 
         etName = (EditText) findViewById(R.id.name);
-        etPopulation = (EditText) findViewById(R.id.population);
-
-        adapter = ArrayAdapter.createFromResource(this, R.array.type_names, android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        etDuties = (EditText) findViewById(R.id.duties);
 
         if (bundle == null) {
 
@@ -81,27 +70,26 @@ public class SettlementActivity extends AppCompatActivity {
 
             RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
             String id = bundle.getString("id", null);
-            settlement = rma.getDB().dbSelectSettlementById(id);
+            profession = rma.getDB().dbSelectProfessionById(id);
 
-            etName.setText(settlement.getName());
-            spinner.setSelection(settlement.getType());
-            etPopulation.setText(String.valueOf(settlement.getPopulation()));
+            etName.setText(profession.getName());
+            etDuties.setText(profession.getDuties());
 
             insertButton.setVisibility(View.GONE);
             updateButton.setVisibility(View.VISIBLE);
         }
     }
 
-    private void saveSettlement(Settlement settlement) {
+    private void saveProfession(Profession profession) {
 
         RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
-        settlement.setId(rma.getDB().dbInsert(settlement));
+        profession.setId(rma.getDB().dbInsert(profession));
     }
 
-    private void updateSettlement(Settlement settlement) {
+    private void updateProfession(Profession profession) {
 
         RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
-        rma.getDB().dbUpdateById(settlement);
+        rma.getDB().dbUpdateById(profession);
     }
 
 }

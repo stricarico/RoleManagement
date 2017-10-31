@@ -9,24 +9,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import java.util.List;
 
-public class SettlementFragment extends Fragment {
+public class ProfessionFragment extends Fragment {
 
-    private List<Settlement> listItems;
-    private SettlementAdapter settlementAdapter;
+    private List<Profession> listItems;
+    private ProfessionAdapter professionAdapter;
     private RecyclerView recyclerView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.settlement_fragment, container, false);
+        View view = inflater.inflate(R.layout.profession_fragment, container, false);
 
-        recyclerView = view.findViewById(R.id.settlementRecyclerView);
+        recyclerView = view.findViewById(R.id.professionRecyclerView);
 
-        FloatingActionButton fab = view.findViewById(R.id.newSettlement);
+        FloatingActionButton fab = view.findViewById(R.id.newProfession);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent resultIntent = new Intent(getActivity(), SettlementActivity.class);
+                Intent resultIntent = new Intent(getActivity(), ProfessionActivity.class);
                 startActivity(resultIntent);
             }
         });
@@ -45,26 +46,26 @@ public class SettlementFragment extends Fragment {
 
         listItems = getItemsToList();
 
-        settlementAdapter = new SettlementAdapter(listItems, this);
-        recyclerView.setAdapter(settlementAdapter);
+        professionAdapter = new ProfessionAdapter(listItems, this);
+        recyclerView.setAdapter(professionAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    private List<Settlement> getItemsToList() {
+    private List<Profession> getItemsToList() {
 
         RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
 
-        List<Settlement> listSettlements = rma.getDB().dbSelectAllSettlements();
+        List<Profession> listProfessions = rma.getDB().dbSelectAllProfessions();
 
-        return listSettlements;
+        return listProfessions;
     }
 
     public void updateItemAtPosition(int position) {
 
-        String id = String.valueOf(settlementAdapter.getItem(position).getId());
+        String id = String.valueOf(professionAdapter.getItem(position).getId());
 
-        Intent resultIntent = new Intent(getActivity(), SettlementActivity.class);
+        Intent resultIntent = new Intent(getActivity(), ProfessionActivity.class);
         resultIntent.putExtra("id", id);
         startActivity(resultIntent);
     }
@@ -72,8 +73,8 @@ public class SettlementFragment extends Fragment {
     public void deleteItemAtPosition(int position) {
 
         RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
-        Settlement settlementToDelete = settlementAdapter.getItem(position);
-        rma.getDB().dbDeleteById(settlementToDelete.getTableName(), String.valueOf(settlementToDelete.getId()));
+        Profession professionToDelete = professionAdapter.getItem(position);
+        rma.getDB().dbDeleteById(professionToDelete.getTableName(), String.valueOf(professionToDelete.getId()));
 
         onResume();
     }

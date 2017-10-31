@@ -112,4 +112,9 @@ public class Character extends AbstractPersistentObject {
 
         return contentValues;
     }
+
+    @Override
+    public ContentValues dataUpdateValues() {
+        return null;
+    }
 }

@@ -17,15 +17,18 @@
     <string name="character_weaknesses">Debilidades</string>
     <string name="character_tab_general">GENERAL</string>
     <string name="settlements">Asentamientos</string>
-    <string name="professions">Profesiones</string>
+    <string name="professions">Oficios</string>
     <string name="quests">Misiones</string>
     <string name="items">Objetos</string>
-    <string name="title_activity_settlement">SettlementActivity</string>
+    <string name="title_activity_settlement">Nuevo Asentamiento</string>
     <string name="action_settings">Settings</string>
     <string name="settlement_name">Nombre</string>
     <string name="settlement_population">Población</string>
     <string name="insert_button">GUARDAR</string>
     <string name="update_button">MODIFICAR</string>
+    <string name="profession_name">Nombre</string>
+    <string name="profession_duties">Responsabilidades</string>
+    <string name="title_activity_profession">Nuevo Oficio</string>
 
     <string-array name="type_names">
         <item>Aldea</item>

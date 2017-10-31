@@ -30,8 +30,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        //db.execSQL(Character.tableCreationString());
         db.execSQL(Settlement.tableCreationString());
+        db.execSQL(Profession.tableCreationString());
     }
 
     @Override
@@ -52,8 +52,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(object.getTableName(), null, object.dataInsertionValues());
     }
 
-    public void dbUpdateSettlementById(Settlement settlement) {
-        db.update(settlement.getTableName(), settlement.dataUpdateValues(), "ID=?", new String[]{String.valueOf(settlement.getId())});
+    public void dbUpdateById(AbstractPersistentObject object) {
+        db.update(object.getTableName(), object.dataUpdateValues(), "ID=?", new String[]{String.valueOf(object.getId())});
     }
 
     public void dbDeleteById(String table, String id) {
@@ -101,6 +101,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             settlement.setTs(Long.parseLong(cursor.getString(1)));
 
             listItems.add(settlement);
+        }
+
+        cursor.close();
+
+        return listItems;
+    }
+
+    public Profession dbSelectProfessionById(String id) {
+
+        String query = "SELECT * FROM PROFESSION WHERE ID=" + id + " ORDER BY NAME ASC";
+        Cursor cursor = this.getDb().rawQuery(query, null);
+
+        Profession profession;
+
+        cursor.moveToNext();
+
+        profession = new Profession(
+                cursor.getString(2),
+                cursor.getString(3)
+        );
+        profession.setId(Long.parseLong(cursor.getString(0)));
+        profession.setTs(Long.parseLong(cursor.getString(1)));
+
+        cursor.close();
+
+        return profession;
+    }
+
+    public List<Profession> dbSelectAllProfessions() {
+
+        String query = "SELECT * FROM PROFESSION ORDER BY NAME ASC";
+        Cursor cursor = this.getDb().rawQuery(query, null);
+
+        List<Profession> listItems = new ArrayList();
+
+        Profession profession;
+
+        while (cursor.moveToNext()) {
+            profession = new Profession(
+                    cursor.getString(2),
+                    cursor.getString(3)
+            );
+            profession.setId(Long.parseLong(cursor.getString(0)));
+            profession.setTs(Long.parseLong(cursor.getString(1)));
+
+            listItems.add(profession);
         }
 
         cursor.close();

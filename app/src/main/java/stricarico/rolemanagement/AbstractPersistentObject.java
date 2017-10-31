@@ -24,4 +24,6 @@ public abstract class AbstractPersistentObject {
     public abstract String getTableName();
 
     public abstract ContentValues dataInsertionValues();
+
+    public abstract ContentValues dataUpdateValues();
 }
