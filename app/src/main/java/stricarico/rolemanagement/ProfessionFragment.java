@@ -78,4 +78,11 @@ public class ProfessionFragment extends Fragment {
 
         onResume();
     }
+
+    public String validateIfProfessionIsRelatedToACharacter(String id) {
+
+        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+
+        return rma.getDB().dbCheckIfProfessionIsRelatedToACharacter(id);
+    }
 }

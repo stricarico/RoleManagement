@@ -6,39 +6,54 @@
     android:layout_height="match_parent"
     tools:context="stricarico.rolemanagement.SettlementActivity">
 
-    <Spinner
-        android:id="@+id/relatedCharacter"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_below="@id/name"></Spinner>
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true">
 
-    <EditText
-        android:id="@+id/judgement"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:hint="@string/character_relation_judgement"
-        android:layout_below="@id/relatedCharacter"
-        android:layout_alignParentStart="true" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/insertButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="75dp"
-        android:text="@string/insert_button" />
+            <Spinner
+                android:id="@+id/relatedCharacter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/name"></Spinner>
 
-    <Button
-        android:id="@+id/updateButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="75dp"
-        android:text="@string/update_button" />
+            <EditText
+                android:id="@+id/judgement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:hint="@string/character_relation_judgement"
+                android:layout_below="@id/relatedCharacter"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:id="@+id/insertButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="75dp"
+                android:text="@string/insert_button" />
+
+            <Button
+                android:id="@+id/updateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="75dp"
+                android:text="@string/update_button" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

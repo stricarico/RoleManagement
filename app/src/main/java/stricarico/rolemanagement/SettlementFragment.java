@@ -77,4 +77,11 @@ public class SettlementFragment extends Fragment {
 
         onResume();
     }
+
+    public String validateIfSettlementIsRelatedToACharacter(String id) {
+
+        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+
+        return rma.getDB().dbCheckIfSettlementIsRelatedToACharacter(id);
+    }
 }

@@ -1,12 +1,15 @@
 package stricarico.rolemanagement;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class SettlementActivity extends AppCompatActivity {
 
@@ -33,14 +36,16 @@ public class SettlementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                settlement = new Settlement(
-                        etName.getText().toString(),
-                        spinner.getSelectedItemPosition(),
-                        Integer.parseInt(etPopulation.getText().toString())
-                );
+                if (validateData()) {
+                    settlement = new Settlement(
+                            etName.getText().toString(),
+                            spinner.getSelectedItemPosition(),
+                            Integer.parseInt(etPopulation.getText().toString())
+                    );
 
-                saveSettlement(settlement);
-                finish();
+                    saveSettlement(settlement);
+                    finish();
+                }
             }
         });
 
@@ -48,12 +53,14 @@ public class SettlementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                settlement.setName(etName.getText().toString());
-                settlement.setType(spinner.getSelectedItemPosition());
-                settlement.setPopulation(Integer.parseInt(etPopulation.getText().toString()));
+                if (validateData()) {
+                    settlement.setName(etName.getText().toString());
+                    settlement.setType(spinner.getSelectedItemPosition());
+                    settlement.setPopulation(Integer.parseInt(etPopulation.getText().toString()));
 
-                updateSettlement(settlement);
-                finish();
+                    updateSettlement(settlement);
+                    finish();
+                }
             }
         });
     }
@@ -102,6 +109,22 @@ public class SettlementActivity extends AppCompatActivity {
 
         RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
         rma.getDB().dbUpdateById(settlement);
+    }
+
+    private boolean validateData() {
+
+        if (etName.getText().toString().matches("")) {
+            etName.setHintTextColor(ContextCompat.getColor(this, R.color.colorError));
+            Toast.makeText(this, "Completar el campo Nombre", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (etPopulation.getText().toString().matches("")) {
+            etPopulation.setHintTextColor(ContextCompat.getColor(this, R.color.colorError));
+            Toast.makeText(this, "Completar el campo Población", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
 }

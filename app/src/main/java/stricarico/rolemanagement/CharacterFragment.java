@@ -1,5 +1,7 @@
 package stricarico.rolemanagement;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -27,8 +29,37 @@ public class CharacterFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent resultIntent = new Intent(getActivity(), CharacterActivity.class);
-                startActivity(resultIntent);
+
+                 if (validateIfThereIsAnySettlement()) {
+                     if (validateIfThereIsAnyProfession()) {
+
+                         Intent resultIntent = new Intent(getActivity(), CharacterActivity.class);
+                         startActivity(resultIntent);
+                     }
+                     else {
+
+                         AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                         alert.setTitle("Relaciones Dependientes");
+                         alert.setMessage("No se puede crear un nuevo Personaje sin haber creado al menos un Oficio");
+                         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                             }
+                         });
+                         alert.show();
+                     }
+                 } else {
+
+                     AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                     alert.setTitle("Relaciones Dependientes");
+                     alert.setMessage("No se puede crear un nuevo Personaje sin haber creado al menos un Asentamiento");
+                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int which) {
+                         }
+                     });
+                     alert.show();
+                 }
             }
         });
 
@@ -86,5 +117,33 @@ public class CharacterFragment extends Fragment {
         Intent resultIntent = new Intent(getActivity(), CharacterRelationActivity.class);
         resultIntent.putExtra("id", id);
         startActivity(resultIntent);
+    }
+
+    private boolean validateIfThereIsAnySettlement() {
+
+        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+
+        return rma.getDB().dbCheckIfThereIsAnySettlement();
+    }
+
+    private boolean validateIfThereIsAnyProfession() {
+
+        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+
+        return rma.getDB().dbCheckIfThereIsAnyProfession();
+    }
+
+    public boolean validateIfThereIsAnyOtherCharacter(String id) {
+
+        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+
+        return rma.getDB().dbCheckIfThereIsAnyOtherCharacter(id);
+    }
+
+    public String validateIfCharacterIsRelatedToAnotherCharacter(String id) {
+
+        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+
+        return rma.getDB().dbCheckIfCharacterIsRelatedToAnotherCharacter(id);
     }
 }

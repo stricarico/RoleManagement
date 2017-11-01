@@ -160,6 +160,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return listItems;
     }
 
+    public String dbCheckIfCharacterIsRelatedToAnotherCharacter(String id) {
+
+        String query = "SELECT * FROM CHARACTER_RELATION WHERE CHARACTER_TWO_ID=" + id;
+        Cursor cursor = this.getDb().rawQuery(query, null);
+
+        if (cursor.moveToNext()) {
+            Character character = dbSelectCharacterById(cursor.getString(1));
+
+            return character.getName();
+        }
+        else return null;
+    }
+
+    public boolean dbCheckIfThereIsAnyOtherCharacter(String id) {
+
+        String query = "SELECT * FROM CHARACTER WHERE ID!=" + id;
+        Cursor cursor = this.getDb().rawQuery(query, new String[]{});
+
+        if (cursor.moveToNext()) {
+            return true;
+        }
+        else return false;
+    }
+
     public CharacterRelation dbSelectCharacterRelationById(String id) {
 
         String query = "SELECT * FROM CHARACTER_RELATION WHERE ID=" + id;
@@ -257,6 +281,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return listItems;
     }
 
+    public String dbCheckIfSettlementIsRelatedToACharacter(String id) {
+
+        String query = "SELECT * FROM CHARACTER WHERE SETTLEMENT_ID=" + id;
+        Cursor cursor = this.getDb().rawQuery(query, null);
+
+        if (cursor.moveToNext()) {
+            return cursor.getString(2);
+        }
+        else return null;
+    }
+
+    public boolean dbCheckIfThereIsAnySettlement() {
+
+        String query = "SELECT * FROM SETTLEMENT";
+        Cursor cursor = this.getDb().rawQuery(query, new String[]{});
+
+        if (cursor.moveToNext()) {
+            return true;
+        }
+        else return false;
+    }
+
     public Profession dbSelectProfessionById(String id) {
 
         String query = "SELECT * FROM PROFESSION WHERE ID=" + id;
@@ -301,5 +347,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return listItems;
+    }
+
+    public String dbCheckIfProfessionIsRelatedToACharacter(String id) {
+
+        String query = "SELECT * FROM CHARACTER WHERE PROFESSION_ID=" + id;
+        Cursor cursor = this.getDb().rawQuery(query, null);
+
+        if (cursor.moveToNext()) {
+            return cursor.getString(2);
+        }
+        else return null;
+    }
+
+    public boolean dbCheckIfThereIsAnyProfession() {
+
+        String query = "SELECT * FROM PROFESSION";
+        Cursor cursor = this.getDb().rawQuery(query, new String[]{});
+
+        if (cursor.moveToNext()) {
+            return true;
+        }
+        else return false;
     }
 }

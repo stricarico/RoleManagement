@@ -19,14 +19,14 @@
             android:id="@+id/settlement"
             android:layout_width="150dp"
             android:layout_height="35dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="50dp"
             android:textSize="15sp" />
 
         <TextView
             android:id="@+id/profession"
             android:layout_width="100dp"
             android:layout_height="35dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="50dp"
             android:layout_marginLeft="155dp"
             android:textSize="15sp" />
 

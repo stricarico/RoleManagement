@@ -1,5 +1,7 @@
 package stricarico.rolemanagement;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,7 +63,7 @@ public class CharacterAdapter extends RecyclerView.Adapter {
         }
 
         public void bindView(final int position) {
-            Character listItem = listItems.get(position);
+            final Character listItem = listItems.get(position);
 
             textViewName.setText(listItem.getName());
             textViewSettlement.setText(listItem.getSettlement().getName().toString());
@@ -81,15 +83,62 @@ public class CharacterAdapter extends RecyclerView.Adapter {
             buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.deleteItemAtPosition(position);
-                    listItems.remove(position);
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+
+                    String character = fragment.validateIfCharacterIsRelatedToAnotherCharacter(String.valueOf(listItem.getId()));
+                    if (character == null) {
+
+                        alert.setTitle("Eliminar Personaje");
+                        alert.setMessage("¿Está seguro que desea eliminar el Personaje " + listItem.getName() + "?");
+                        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                fragment.deleteItemAtPosition(position);
+                                listItems.remove(position);
+                            }
+                        });
+                        alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        alert.show();
+                    }
+                    else {
+                        alert.setTitle("Relaciones Dependientes");
+                        alert.setMessage("El Personaje " + listItem.getName() + " tiene una relación creada con el Personaje " + character + " y no se puede eliminar");
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        alert.show();
+                    }
                 }
             });
 
             buttonRelate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.relateItemAtPosition(position);
+
+                    if (fragment.validateIfThereIsAnyOtherCharacter(String.valueOf(listItem.getId()))) {
+
+                        fragment.relateItemAtPosition(position);
+                    }
+                    else {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+                        alert.setTitle("Relaciones Dependientes");
+                        alert.setMessage("No se puede relacionar este Personaje con otro, dado que aún no se ha creado otro Personaje con el cual relacionarlo");
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        alert.show();
+                    }
                 }
             });
         }

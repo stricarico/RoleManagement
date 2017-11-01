@@ -1,10 +1,12 @@
 package stricarico.rolemanagement;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class ProfessionActivity extends AppCompatActivity {
 
@@ -29,13 +31,15 @@ public class ProfessionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                profession = new Profession(
-                        etName.getText().toString(),
-                        etDuties.getText().toString()
-                );
+                if (validateData()) {
+                    profession = new Profession(
+                            etName.getText().toString(),
+                            etDuties.getText().toString()
+                    );
 
-                saveProfession(profession);
-                finish();
+                    saveProfession(profession);
+                    finish();
+                }
             }
         });
 
@@ -43,11 +47,13 @@ public class ProfessionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                profession.setName(etName.getText().toString());
-                profession.setDuties(etDuties.getText().toString());
+                if (validateData()) {
+                    profession.setName(etName.getText().toString());
+                    profession.setDuties(etDuties.getText().toString());
 
-                updateProfession(profession);
-                finish();
+                    updateProfession(profession);
+                    finish();
+                }
             }
         });
     }
@@ -90,6 +96,17 @@ public class ProfessionActivity extends AppCompatActivity {
 
         RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
         rma.getDB().dbUpdateById(profession);
+    }
+
+    private boolean validateData() {
+
+        if (etName.getText().toString().matches("")) {
+            etName.setHintTextColor(ContextCompat.getColor(this, R.color.colorError));
+            Toast.makeText(this, "Completar el campo Nombre", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
 }

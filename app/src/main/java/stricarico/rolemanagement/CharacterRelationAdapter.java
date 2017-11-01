@@ -1,5 +1,7 @@
 package stricarico.rolemanagement;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +61,7 @@ public class CharacterRelationAdapter extends RecyclerView.Adapter {
         }
 
         public void bindView(final int position) {
-            CharacterRelation listItem = listItems.get(position);
+            final CharacterRelation listItem = listItems.get(position);
 
             textViewRelatedCharacter.setText(listItem.getCharacterTwo().getName());
             textViewJudgement.setText(listItem.getJudgement());
@@ -77,8 +79,25 @@ public class CharacterRelationAdapter extends RecyclerView.Adapter {
             buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    activity.deleteItemAtPosition(position);
-                    listItems.remove(position);
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+                    alert.setTitle("Eliminar Relación entre Personajes");
+                    alert.setMessage("¿Está seguro que desea eliminar la relación entre el Personaje " + listItem.getCharacterOne().getName() + " y el Personaje " + listItem.getCharacterTwo().getName() + "?");
+                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            activity.deleteItemAtPosition(position);
+                            listItems.remove(position);
+                        }
+                    });
+                    alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alert.show();
                 }
             });
         }

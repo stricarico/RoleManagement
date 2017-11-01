@@ -112,8 +112,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="75dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_below="@id/weaknesses"
                 android:text="@string/insert_button" />
 
@@ -122,8 +122,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="75dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_below="@id/weaknesses"
                 android:text="@string/update_button" />
 

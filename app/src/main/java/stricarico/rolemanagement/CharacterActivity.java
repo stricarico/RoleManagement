@@ -1,11 +1,13 @@
 package stricarico.rolemanagement;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -44,22 +46,24 @@ public class CharacterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                character = new Character(
-                        etName.getText().toString(),
-                        Integer.parseInt(etAge.getText().toString()),
-                        settlementAdapter.getItem(settlementSpinner.getSelectedItemPosition()),
-                        professionAdapter.getItem(professionSpinner.getSelectedItemPosition()),
-                        new String[] {
-                                etHostileAttitude.getText().toString(),
-                                etIndifferentAttitude.getText().toString(),
-                                etFriendlyAttitude.getText().toString()
-                        },
-                        etStrengths.getText().toString(),
-                        etWeaknesses.getText().toString()
-                );
+                if (validateData()) {
+                    character = new Character(
+                            etName.getText().toString(),
+                            Integer.parseInt(etAge.getText().toString()),
+                            settlementAdapter.getItem(settlementSpinner.getSelectedItemPosition()),
+                            professionAdapter.getItem(professionSpinner.getSelectedItemPosition()),
+                            new String[]{
+                                    etHostileAttitude.getText().toString(),
+                                    etIndifferentAttitude.getText().toString(),
+                                    etFriendlyAttitude.getText().toString()
+                            },
+                            etStrengths.getText().toString(),
+                            etWeaknesses.getText().toString()
+                    );
 
-                saveCharacter(character);
-                finish();
+                    saveCharacter(character);
+                    finish();
+                }
             }
         });
 
@@ -67,20 +71,22 @@ public class CharacterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                character.setName(etName.getText().toString());
-                character.setAge(Integer.parseInt(etAge.getText().toString()));
-                character.setSettlement(settlementAdapter.getItem(settlementSpinner.getSelectedItemPosition()));
-                character.setProfession(professionAdapter.getItem(professionSpinner.getSelectedItemPosition()));
-                character.setGeneralAttitude(new String[] {
-                        etHostileAttitude.getText().toString(),
-                        etIndifferentAttitude.getText().toString(),
-                        etFriendlyAttitude.getText().toString()
-                });
-                character.setStrengths(etStrengths.getText().toString());
-                character.setWeaknesses(etWeaknesses.getText().toString());
+                if (validateData()) {
+                    character.setName(etName.getText().toString());
+                    character.setAge(Integer.parseInt(etAge.getText().toString()));
+                    character.setSettlement(settlementAdapter.getItem(settlementSpinner.getSelectedItemPosition()));
+                    character.setProfession(professionAdapter.getItem(professionSpinner.getSelectedItemPosition()));
+                    character.setGeneralAttitude(new String[]{
+                            etHostileAttitude.getText().toString(),
+                            etIndifferentAttitude.getText().toString(),
+                            etFriendlyAttitude.getText().toString()
+                    });
+                    character.setStrengths(etStrengths.getText().toString());
+                    character.setWeaknesses(etWeaknesses.getText().toString());
 
-                updateCharacter(character);
-                finish();
+                    updateCharacter(character);
+                    finish();
+                }
             }
         });
     }
@@ -151,6 +157,23 @@ public class CharacterActivity extends AppCompatActivity {
 
         RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
         rma.getDB().dbUpdateById(character);
+    }
+
+    private boolean validateData() {
+
+        if (etName.getText().toString().matches("")) {
+            etName.setHintTextColor(ContextCompat.getColor(this, R.color.colorError));
+            Toast.makeText(this, "Completar el campo Nombre", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (etAge.getText().toString().matches("")) {
+            etAge.setHintTextColor(ContextCompat.getColor(this, R.color.colorError));
+            Toast.makeText(this, "Completar el campo Edad", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
 }

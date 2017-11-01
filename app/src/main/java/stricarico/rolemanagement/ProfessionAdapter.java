@@ -1,5 +1,7 @@
 package stricarico.rolemanagement;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +61,7 @@ public class ProfessionAdapter extends RecyclerView.Adapter {
         }
 
         public void bindView(final int position) {
-            Profession listItem = listItems.get(position);
+            final Profession listItem = listItems.get(position);
 
             textViewName.setText(listItem.getName());
             textViewDuties.setText(listItem.getDuties());
@@ -77,8 +79,39 @@ public class ProfessionAdapter extends RecyclerView.Adapter {
             buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.deleteItemAtPosition(position);
-                    listItems.remove(position);
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
+
+                    String character = fragment.validateIfProfessionIsRelatedToACharacter(String.valueOf(listItem.getId()));
+                    if (character == null) {
+                        alert.setTitle("Eliminar Oficio");
+                        alert.setMessage("¿Está seguro que desea eliminar el Oficio " + listItem.getName() + "?");
+                        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                fragment.deleteItemAtPosition(position);
+                                listItems.remove(position);
+                            }
+                        });
+                        alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                        alert.show();
+                    }
+                    else {
+                        alert.setTitle("Relaciones Dependientes");
+                        alert.setMessage("El Oficio " + listItem.getName() + " está relacionado con el Personaje " + character + " y no se puede eliminar");
+                        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                        alert.show();
+                    }
                 }
             });
         }
