@@ -21,16 +21,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CharacterActivity"
-            android:label="@string/title_activity_character"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".SettlementActivity"
             android:label="@string/title_activity_settlement"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".ProfessionActivity"
             android:label="@string/title_activity_profession"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".CharacterActivity"
+            android:label="@string/title_activity_character"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

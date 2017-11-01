@@ -9,12 +9,12 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class SettlementAdapter extends RecyclerView.Adapter {
+public class CharacterAdapter extends RecyclerView.Adapter {
 
-    private List<Settlement> listItems;
-    private SettlementFragment fragment;
+    private List<Character> listItems;
+    private CharacterFragment fragment;
 
-    public SettlementAdapter(List<Settlement> listItem, SettlementFragment fragment) {
+    public CharacterAdapter(List<Character> listItem, CharacterFragment fragment) {
         this.listItems = listItem;
         this.fragment = fragment;
     }
@@ -22,7 +22,7 @@ public class SettlementAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.settlement_list_item, parent, false);
+                .inflate(R.layout.character_list_item, parent, false);
         return new ListViewHolder(view);
     }
 
@@ -36,50 +36,40 @@ public class SettlementAdapter extends RecyclerView.Adapter {
         return listItems.size();
     }
 
-    public Settlement getItem(int position) {
+    public Character getItem(int position) {
         return listItems.get(position);
     }
 
     private class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView textViewName, textViewType, textViewPopulation;
-        private Button buttonUpdate, buttonDelete;
+        private TextView textViewName, textViewSettlement, textViewProfession;
+        private Button buttonUpdate, buttonDelete, buttonRelate;
 
 
         public ListViewHolder(View itemView) {
             super(itemView);
 
             textViewName = itemView.findViewById(R.id.name);
-            textViewType = itemView.findViewById(R.id.type);
-            textViewPopulation = itemView.findViewById(R.id.population);
+            textViewSettlement = itemView.findViewById(R.id.settlement);
+            textViewProfession = itemView.findViewById(R.id.profession);
 
             buttonUpdate = itemView.findViewById(R.id.editButton);
             buttonDelete = itemView.findViewById(R.id.deleteButton);
+            buttonRelate = itemView.findViewById(R.id.relateButton);
 
             itemView.setOnClickListener(this);
         }
 
         public void bindView(final int position) {
-            Settlement listItem = listItems.get(position);
+            Character listItem = listItems.get(position);
 
             textViewName.setText(listItem.getName());
-
-            switch (listItem.getType()) {
-                case 0:
-                    textViewType.setText("Aldea");
-                    break;
-                case 1:
-                    textViewType.setText("Pueblo");
-                    break;
-                case 2:
-                    textViewType.setText("Ciudad");
-                    break;
-            }
-
-            textViewPopulation.setText(String.valueOf(listItem.getPopulation()));
+            textViewSettlement.setText(listItem.getSettlement().getName().toString());
+            textViewProfession.setText(listItem.getProfession().getName().toString());
 
             buttonUpdate.setBackgroundResource(R.drawable.ic_edit_black_24dp);
             buttonDelete.setBackgroundResource(R.drawable.ic_delete_black_24dp);
+            buttonRelate.setBackgroundResource(R.drawable.ic_character_relation_black_24dp);
 
             buttonUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override

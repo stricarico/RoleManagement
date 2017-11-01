@@ -37,7 +37,7 @@ public class Settlement extends AbstractPersistentObject {
     public static String tableCreationString() {
 
         String table;
-        table = "CREATE TABLE SETTLEMENT (" +
+        table = "CREATE TABLE " + tableName + " (" +
                 "ID                         INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "TS                         DATE," +
                 "NAME                       TEXT," +
@@ -65,6 +65,7 @@ public class Settlement extends AbstractPersistentObject {
         return contentValues;
     }
 
+    @Override
     public ContentValues dataUpdateValues() {
 
         ContentValues contentValues = new ContentValues();

@@ -1,31 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="stricarico.rolemanagement.CharacterActivity">
+    tools:context="stricarico.rolemanagement.SettlementActivity">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <!--<android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-    </android.support.design.widget.AppBarLayout>-->
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/container"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:hint="@string/character_name"
+                android:layout_marginBottom="20dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:id="@+id/age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:hint="@string/character_age"
+                android:layout_below="@id/name"
+                android:layout_marginBottom="20dp"
+                android:layout_alignParentStart="true" />
+
+            <Spinner
+                android:id="@+id/settlement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/age"></Spinner>
+
+            <Spinner
+                android:id="@+id/profession"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/settlement"></Spinner>
+
+            <EditText
+                android:id="@+id/hostileAttitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:hint="@string/character_hostile_attitude"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/profession"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:id="@+id/indifferentAttitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:hint="@string/character_indifferent_attitude"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/hostileAttitude"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:id="@+id/friendlyAttitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:hint="@string/character_friendly_attitude"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/indifferentAttitude"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:id="@+id/strengths"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:hint="@string/character_strengths"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/friendlyAttitude"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:id="@+id/weaknesses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:hint="@string/character_weaknesses"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/strengths"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:id="@+id/insertButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="75dp"
+                android:layout_below="@id/weaknesses"
+                android:text="@string/insert_button" />
+
+            <Button
+                android:id="@+id/updateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="75dp"
+                android:layout_below="@id/weaknesses"
+                android:text="@string/update_button" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

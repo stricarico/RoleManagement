@@ -1,9 +1,9 @@
 package stricarico.rolemanagement;
 
 import android.content.ContentValues;
-import java.sql.Timestamp;
-import java.util.ArrayList;
+
 import java.util.Arrays;
+import java.util.List;
 
 
 public class Character extends AbstractPersistentObject {
@@ -17,7 +17,6 @@ public class Character extends AbstractPersistentObject {
     private String[] generalAttitude;
     private String strengths;
     private String weaknesses;
-    private ArrayList<Character> relatedCharacters;
 
     public Character(
             String characterName,
@@ -26,8 +25,7 @@ public class Character extends AbstractPersistentObject {
             Profession characterProfession,
             String[] characterGeneralAttitude,
             String characterStrengths,
-            String characterWeaknesses,
-            ArrayList<Character> characterRelatedCharacters
+            String characterWeaknesses
     ) {
         this.name = characterName;
         this.age = characterAge;
@@ -36,29 +34,9 @@ public class Character extends AbstractPersistentObject {
         this.generalAttitude = characterGeneralAttitude;
         this.strengths = characterStrengths;
         this.weaknesses = characterWeaknesses;
-        this.relatedCharacters = characterRelatedCharacters;
     }
 
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public int getAge() {
-        return age;
-    }
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Settlement getSettlement() {
-        return settlement;
-    }
-    public void setSettlement(Settlement settlement) {
-        this.settlement = settlement;
-    }
 
     public static String tableCreationString() {
 
@@ -74,10 +52,65 @@ public class Character extends AbstractPersistentObject {
                 "INDIFFERENT_ATTITUDE       TEXT," +
                 "FRIENDLY_ATTITUDE          TEXT," +
                 "STRENGTHS                  TEXT," +
-                "WEAKNESSES                 TEXT," +
-                "RELATED_CHARACTERS_IDS     TEXT)";
+                "WEAKNESSES                 TEXT)";
 
         return table;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public Settlement getSettlement() {
+        return settlement;
+    }
+
+    public void setSettlement(Settlement settlement) {
+        this.settlement = settlement;
+    }
+
+    public Profession getProfession() {
+        return profession;
+    }
+
+    public void setProfession(Profession profession) {
+        this.profession = profession;
+    }
+
+    public String[] getGeneralAttitude() {
+        return generalAttitude;
+    }
+
+    public void setGeneralAttitude(String[] generalAttitude) {
+        this.generalAttitude = generalAttitude;
+    }
+
+    public String getStrengths() {
+        return strengths;
+    }
+
+    public void setStrengths(String strengths) {
+        this.strengths = strengths;
+    }
+
+    public String getWeaknesses() {
+        return weaknesses;
+    }
+
+    public void setWeaknesses(String weaknesses) {
+        this.weaknesses = weaknesses;
     }
 
     @Override
@@ -89,14 +122,6 @@ public class Character extends AbstractPersistentObject {
     public ContentValues dataInsertionValues() {
 
         ContentValues contentValues = new ContentValues();
-        String[] relatedCharactersIDS = new String[relatedCharacters.size()];
-
-        for (Character each: relatedCharacters) {
-            relatedCharactersIDS[relatedCharacters.indexOf(each)] = String.valueOf(each.getId());
-        }
-
-        String relatedCharactersString = Arrays.toString(relatedCharactersIDS);
-        relatedCharactersString = relatedCharactersString.substring(1, relatedCharactersString.length() -1);
 
         contentValues.put("TS", System.currentTimeMillis());
         contentValues.put("NAME", this.name);
@@ -108,13 +133,25 @@ public class Character extends AbstractPersistentObject {
         contentValues.put("FRIENDLY_ATTITUDE", this.generalAttitude[2]);
         contentValues.put("STRENGTHS", this.strengths);
         contentValues.put("WEAKNESSES", this.weaknesses);
-        contentValues.put("RELATED_CHARACTERS_IDS", relatedCharactersString);
 
         return contentValues;
     }
 
     @Override
     public ContentValues dataUpdateValues() {
-        return null;
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put("NAME", this.name);
+        contentValues.put("AGE", this.age);
+        contentValues.put("SETTLEMENT_ID", this.settlement.getId());
+        contentValues.put("PROFESSION_ID", this.profession.getId());
+        contentValues.put("HOSTILE_ATTITUDE", this.generalAttitude[0]);
+        contentValues.put("INDIFFERENT_ATTITUDE", this.generalAttitude[1]);
+        contentValues.put("FRIENDLY_ATTITUDE", this.generalAttitude[2]);
+        contentValues.put("STRENGTHS", this.strengths);
+        contentValues.put("WEAKNESSES", this.weaknesses);
+
+        return contentValues;
     }
 }
