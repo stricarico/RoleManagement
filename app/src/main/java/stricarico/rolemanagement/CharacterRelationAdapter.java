@@ -9,20 +9,20 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class CharacterAdapter extends RecyclerView.Adapter {
+public class CharacterRelationAdapter extends RecyclerView.Adapter {
 
-    private List<Character> listItems;
-    private CharacterFragment fragment;
+    private List<CharacterRelation> listItems;
+    private CharacterRelationActivity activity;
 
-    public CharacterAdapter(List<Character> listItem, CharacterFragment fragment) {
+    public CharacterRelationAdapter(List<CharacterRelation> listItem, CharacterRelationActivity activity) {
         this.listItems = listItem;
-        this.fragment = fragment;
+        this.activity = activity;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.character_list_item, parent, false);
+                .inflate(R.layout.character_relation_list_item, parent, false);
         return new ListViewHolder(view);
     }
 
@@ -36,60 +36,49 @@ public class CharacterAdapter extends RecyclerView.Adapter {
         return listItems.size();
     }
 
-    public Character getItem(int position) {
+    public CharacterRelation getItem(int position) {
         return listItems.get(position);
     }
 
     private class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView textViewName, textViewSettlement, textViewProfession;
-        private Button buttonUpdate, buttonDelete, buttonRelate;
+        private TextView textViewRelatedCharacter, textViewJudgement;
+        private Button buttonUpdate, buttonDelete;
 
 
         public ListViewHolder(View itemView) {
             super(itemView);
 
-            textViewName = itemView.findViewById(R.id.name);
-            textViewSettlement = itemView.findViewById(R.id.settlement);
-            textViewProfession = itemView.findViewById(R.id.profession);
+            textViewRelatedCharacter = itemView.findViewById(R.id.relatedCharacter);
+            textViewJudgement = itemView.findViewById(R.id.judgement);
 
             buttonUpdate = itemView.findViewById(R.id.editButton);
             buttonDelete = itemView.findViewById(R.id.deleteButton);
-            buttonRelate = itemView.findViewById(R.id.relateButton);
 
             itemView.setOnClickListener(this);
         }
 
         public void bindView(final int position) {
-            Character listItem = listItems.get(position);
+            CharacterRelation listItem = listItems.get(position);
 
-            textViewName.setText(listItem.getName());
-            textViewSettlement.setText(listItem.getSettlement().getName().toString());
-            textViewProfession.setText(listItem.getProfession().getName().toString());
+            textViewRelatedCharacter.setText(listItem.getCharacterTwo().getName());
+            textViewJudgement.setText(listItem.getJudgement());
 
             buttonUpdate.setBackgroundResource(R.drawable.ic_edit_black_24dp);
             buttonDelete.setBackgroundResource(R.drawable.ic_delete_black_24dp);
-            buttonRelate.setBackgroundResource(R.drawable.ic_character_relation_black_24dp);
 
             buttonUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.updateItemAtPosition(position);
+                    activity.updateItemAtPosition(position);
                 }
             });
 
             buttonDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    fragment.deleteItemAtPosition(position);
+                    activity.deleteItemAtPosition(position);
                     listItems.remove(position);
-                }
-            });
-
-            buttonRelate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    fragment.relateItemAtPosition(position);
                 }
             });
         }

@@ -18,14 +18,6 @@
             android:id="@+id/fragmentProfession"
             android:icon="@drawable/ic_profession_black_24dp"
             android:title="@string/professions" />
-        <item
-            android:id="@+id/fragmentQuest"
-            android:icon="@drawable/ic_quest_black_24dp"
-            android:title="@string/quests" />
-        <item
-            android:id="@+id/fragmentItem"
-            android:icon="@drawable/ic_item_black_24dp"
-            android:title="@string/items" />
     </group>
 
 </menu>

@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        db.execSQL(CharacterRelation.tableCreationString());
         db.execSQL(Character.tableCreationString());
         db.execSQL(Settlement.tableCreationString());
         db.execSQL(Profession.tableCreationString());
@@ -63,7 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Character dbSelectCharacterById(String id) {
 
-        String query = "SELECT * FROM CHARACTER WHERE ID=" + id + " ORDER BY NAME ASC";
+        String query = "SELECT * FROM CHARACTER WHERE ID=" + id;
         Cursor cursor = this.getDb().rawQuery(query, null);
 
         Character character;
@@ -125,9 +126,66 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return listItems;
     }
 
-    /*public List<CharacterRelation> dbSelectCharacterRelationsById (String id) {
+    public List<Character> dbSelectAllCharactersButCurrent(String id) {
 
-        String query = "SELECT * FROM CHARACTER_RELATIONS WHERE CHARACTER_ONE_ID=" + id + " ORDER BY NAME ASC";
+        String query = "SELECT * FROM CHARACTER WHERE ID!=" + id + " ORDER BY NAME ASC";
+        Cursor cursor = this.getDb().rawQuery(query, new String[]{});
+
+        List<Character> listItems = new ArrayList();
+
+        Character character;
+
+        while (cursor.moveToNext()) {
+            character = new Character(
+                    cursor.getString(2),
+                    Integer.parseInt(cursor.getString(3)),
+                    dbSelectSettlementById(cursor.getString(4)),
+                    dbSelectProfessionById(cursor.getString(5)),
+                    new String[] {
+                            cursor.getString(6),
+                            cursor.getString(7),
+                            cursor.getString(8)
+                    },
+                    cursor.getString(9),
+                    cursor.getString(10)
+            );
+            character.setId(Long.parseLong(cursor.getString(0)));
+            character.setTs(Long.parseLong(cursor.getString(1)));
+
+            listItems.add(character);
+        }
+
+        cursor.close();
+
+        return listItems;
+    }
+
+    public CharacterRelation dbSelectCharacterRelationById(String id) {
+
+        String query = "SELECT * FROM CHARACTER_RELATION WHERE ID=" + id;
+        Cursor cursor = this.getDb().rawQuery(query, null);
+
+        CharacterRelation characterRelation = null;
+
+        if (cursor.moveToNext()) {
+
+            characterRelation = new CharacterRelation(
+                    dbSelectCharacterById(cursor.getString(1)),
+                    dbSelectCharacterById(cursor.getString(2)),
+                    cursor.getString(4)
+            );
+            characterRelation.setId(Long.parseLong(cursor.getString(0)));
+            characterRelation.setTs(Long.parseLong(cursor.getString(3)));
+        }
+
+        cursor.close();
+
+        return characterRelation;
+    }
+
+    public List<CharacterRelation> dbSelectAllCharacterRelationsByCharacterId(String id) {
+
+        String query = "SELECT * FROM CHARACTER_RELATION WHERE CHARACTER_ONE_ID=" + id + " ORDER BY CHARACTER_TWO_ID ASC";
         Cursor cursor = this.getDb().rawQuery(query, null);
 
         List<CharacterRelation> listItems = new ArrayList();
@@ -136,14 +194,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         while (cursor.moveToNext()) {
             characterRelation = new CharacterRelation(
+                    dbSelectCharacterById(cursor.getString(1)),
+                    dbSelectCharacterById(cursor.getString(2)),
+                    cursor.getString(4)
+            );
+            characterRelation.setId(Long.parseLong(cursor.getString(0)));
+            characterRelation.setTs(Long.parseLong(cursor.getString(3)));
 
-            )
+            listItems.add(characterRelation);
         }
-    }*/
+
+        cursor.close();
+
+        return listItems;
+    }
 
     public Settlement dbSelectSettlementById(String id) {
 
-        String query = "SELECT * FROM SETTLEMENT WHERE ID=" + id + " ORDER BY NAME ASC";
+        String query = "SELECT * FROM SETTLEMENT WHERE ID=" + id;
         Cursor cursor = this.getDb().rawQuery(query, null);
 
         Settlement settlement;
@@ -191,7 +259,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Profession dbSelectProfessionById(String id) {
 
-        String query = "SELECT * FROM PROFESSION WHERE ID=" + id + " ORDER BY NAME ASC";
+        String query = "SELECT * FROM PROFESSION WHERE ID=" + id;
         Cursor cursor = this.getDb().rawQuery(query, null);
 
         Profession profession;

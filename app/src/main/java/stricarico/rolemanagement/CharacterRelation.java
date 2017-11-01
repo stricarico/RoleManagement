@@ -7,13 +7,12 @@ public class CharacterRelation extends AbstractPersistentObject {
     private static final String tableName = "CHARACTER_RELATION";
 
     private Character characterOne, characterTwo;
-    private String characterOneTowardsTwo, getCharacterTwoTowardsOne;
+    private String judgement;
 
-    public CharacterRelation(Character characterOne, Character characterTwo, String characterOneTowardsTwo, String getCharacterTwoTowardsOne) {
+    public CharacterRelation(Character characterOne, Character characterTwo, String judgement) {
         this.characterOne = characterOne;
         this.characterTwo = characterTwo;
-        this.characterOneTowardsTwo = characterOneTowardsTwo;
-        this.getCharacterTwoTowardsOne = getCharacterTwoTowardsOne;
+        this.judgement = judgement;
     }
 
     public Character getCharacterOne() {
@@ -32,32 +31,23 @@ public class CharacterRelation extends AbstractPersistentObject {
         this.characterTwo = characterTwo;
     }
 
-    public String getCharacterOneTowardsTwo() {
-        return characterOneTowardsTwo;
+    public String getJudgement() {
+        return judgement;
     }
 
-    public void setCharacterOneTowardsTwo(String characterOneTowardsTwo) {
-        this.characterOneTowardsTwo = characterOneTowardsTwo;
-    }
-
-    public String getGetCharacterTwoTowardsOne() {
-        return getCharacterTwoTowardsOne;
-    }
-
-    public void setGetCharacterTwoTowardsOne(String getCharacterTwoTowardsOne) {
-        this.getCharacterTwoTowardsOne = getCharacterTwoTowardsOne;
+    public void setJudgement(String judgement) {
+        this.judgement = judgement;
     }
 
     public static String tableCreationString() {
 
         String table;
         table = "CREATE TABLE " + tableName + " (" +
+                "ID                         INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "CHARACTER_ONE_ID           INTEGER," +
                 "CHARACTER_TWO_ID           INTEGER," +
-                "ONE_TOWARDS_TWO            TEXT," +
-                "TWO_TOWARDS_ONE            TEXT," +
-                "PRIMARY KEY (CHARACTER_ONE_ID, CHARACTER_TWO_ID)" +
-                ")";
+                "TS                         DATE," +
+                "JUDGEMENT                  TEXT)";
 
         return table;
     }
@@ -69,11 +59,26 @@ public class CharacterRelation extends AbstractPersistentObject {
 
     @Override
     public ContentValues dataInsertionValues() {
-        return null;
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put("TS", System.currentTimeMillis());
+        contentValues.put("CHARACTER_ONE_ID", this.characterOne.getId());
+        contentValues.put("CHARACTER_TWO_ID", this.characterTwo.getId());
+        contentValues.put("JUDGEMENT", this.judgement);
+
+        return contentValues;
     }
 
     @Override
     public ContentValues dataUpdateValues() {
-        return null;
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put("CHARACTER_ONE_ID", this.characterOne.getId());
+        contentValues.put("CHARACTER_TWO_ID", this.characterTwo.getId());
+        contentValues.put("JUDGEMENT", this.judgement);
+
+        return contentValues;
     }
 }

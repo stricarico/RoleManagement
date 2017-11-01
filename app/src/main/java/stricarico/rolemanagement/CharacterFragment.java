@@ -78,4 +78,13 @@ public class CharacterFragment extends Fragment {
 
         onResume();
     }
+
+    public void relateItemAtPosition(int position) {
+
+        String id = String.valueOf(characterAdapter.getItem(position).getId());
+
+        Intent resultIntent = new Intent(getActivity(), CharacterRelationActivity.class);
+        resultIntent.putExtra("id", id);
+        startActivity(resultIntent);
+    }
 }

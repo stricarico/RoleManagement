@@ -32,6 +32,14 @@
             android:name=".CharacterActivity"
             android:label="@string/title_activity_character"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".CharacterRelationActivity"
+            android:label="@string/title_activity_character_relation"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".CharacterRelationCreationActivity"
+            android:label="@string/title_activity_character_relation_creation"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
