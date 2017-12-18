@@ -44,6 +44,8 @@ public class ProfessionFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        MainActivity.mainToolbar.setTitle(R.string.professions);
+
         listItems = getItemsToList();
 
         professionAdapter = new ProfessionAdapter(listItems, this);

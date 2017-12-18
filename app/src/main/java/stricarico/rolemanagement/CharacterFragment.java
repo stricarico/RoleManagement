@@ -9,12 +9,15 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
 public class CharacterFragment extends Fragment {
+
+    private RoleManagementApplication rma;
 
     private List<Character> listItems;
     private CharacterAdapter characterAdapter;
@@ -23,6 +26,7 @@ public class CharacterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.character_fragment, container, false);
 
+        rma = (RoleManagementApplication)getActivity().getApplicationContext();
         recyclerView = view.findViewById(R.id.characterRecyclerView);
 
         FloatingActionButton fab = view.findViewById(R.id.newCharacter);
@@ -75,21 +79,35 @@ public class CharacterFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        listItems = getItemsToList();
+        MainActivity.mainToolbar.setTitle(R.string.characters);
+
+        listItems = rma.getDB().dbSelectAllCharacters();
 
         characterAdapter = new CharacterAdapter(listItems, this);
         recyclerView.setAdapter(characterAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
+        registerForContextMenu(recyclerView);
     }
 
-    private List<Character> getItemsToList() {
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+        int position = characterAdapter.getPosition();
 
-        List<Character> listCharacters = rma.getDB().dbSelectAllCharacters();
+        switch (item.getItemId()) {
 
-        return listCharacters;
+            case R.id.relationships:
+                break;
+            case R.id.edit:
+                break;
+            case R.id.delete:
+                attemptToDeleteItemAtPosition(position);
+                break;
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     public void updateItemAtPosition(int position) {
@@ -101,11 +119,81 @@ public class CharacterFragment extends Fragment {
         startActivity(resultIntent);
     }
 
-    public void deleteItemAtPosition(int position) {
+    private void attemptToDeleteItemAtPosition (int position) {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
         Character characterToDelete = characterAdapter.getItem(position);
-        rma.getDB().dbDeleteById(characterToDelete.getTableName(), String.valueOf(characterToDelete.getId()));
+        String relatedCharacter = validateIfCharacterIsRelatedToAnotherCharacter(
+                String.valueOf(characterToDelete.getId()));
+
+        if (relatedCharacter == null) {
+            askToDeleteCharacter(
+                    characterToDelete.getName(),
+                    characterToDelete.getTableName(),
+                    String.valueOf(characterToDelete.getId())
+            );
+        }
+        else {
+            alertThatCharacterIsRelated(
+                    characterToDelete.getName(),
+                    relatedCharacter
+            );
+        }
+    }
+
+    private void askToDeleteCharacter(
+            final String characterName,
+            final String characterTableName,
+            final String characterId) {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+
+        alert.setTitle("Eliminar Personaje");
+        alert.setMessage("¿Está seguro que desea eliminar el Personaje " + characterName + "?");
+
+        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                deleteCharacterById(characterTableName, characterId);
+            }
+        });
+
+        alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alert.show();
+    }
+
+    private void alertThatCharacterIsRelated(
+            final String characterName,
+            final String relatedCharacterName) {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+
+        alert.setTitle("Relaciones Dependientes");
+        alert.setMessage("El Personaje "
+                + characterName
+                + " tiene una relación creada con el Personaje "
+                + relatedCharacterName
+                + " y no se puede eliminar");
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alert.show();
+    }
+
+    private void deleteCharacterById(String tableName, String id) {
+
+        rma.getDB().dbDeleteById(tableName, id);
 
         onResume();
     }

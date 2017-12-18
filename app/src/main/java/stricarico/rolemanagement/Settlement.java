@@ -1,7 +1,6 @@
 package stricarico.rolemanagement;
 
 import android.content.ContentValues;
-import java.sql.Timestamp;
 
 public class Settlement extends AbstractPersistentObject {
 
@@ -10,15 +9,18 @@ public class Settlement extends AbstractPersistentObject {
     private String name;
     private int type;
     private int population;
+    private Campaign campaign;
 
     public Settlement(
             String settlementName,
             int settlementType,
-            int settlementPopulation
+            int settlementPopulation,
+            Campaign settlementCampaign
     ) {
         this.name = settlementName;
         this.type = settlementType;
         this.population = settlementPopulation;
+        this.campaign = settlementCampaign;
     }
 
     public String getName() { return name; }
@@ -42,7 +44,8 @@ public class Settlement extends AbstractPersistentObject {
                 "TS                         DATE," +
                 "NAME                       TEXT," +
                 "TYPE                       INTEGER," +
-                "POPULATION                 INTEGER)";
+                "POPULATION                 INTEGER," +
+                "CAMPAIGN_ID                INTEGER)";
 
         return table;
     }
@@ -61,6 +64,7 @@ public class Settlement extends AbstractPersistentObject {
         contentValues.put("NAME", this.name);
         contentValues.put("TYPE", this.type);
         contentValues.put("POPULATION", this.population);
+        contentValues.put("CAMPAIGN_ID", this.campaign.getId());
 
         return contentValues;
     }

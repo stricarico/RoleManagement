@@ -29,8 +29,8 @@ public class SettlementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settlement);
 
-        insertButton = (Button) findViewById(R.id.insertButton);
-        updateButton = (Button) findViewById(R.id.updateButton);
+        insertButton = findViewById(R.id.insertButton);
+        updateButton = findViewById(R.id.updateButton);
 
         insertButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,7 +40,9 @@ public class SettlementActivity extends AppCompatActivity {
                     settlement = new Settlement(
                             etName.getText().toString(),
                             spinner.getSelectedItemPosition(),
-                            Integer.parseInt(etPopulation.getText().toString())
+                            Integer.parseInt(etPopulation.getText().toString()),
+                            MainActivity.rma.getSelectedCampaign()
+
                     );
 
                     saveSettlement(settlement);
@@ -70,10 +72,10 @@ public class SettlementActivity extends AppCompatActivity {
         super.onResume();
 
         bundle = getIntent().getExtras();
-        spinner = (Spinner) findViewById(R.id.type);
+        spinner = findViewById(R.id.type);
 
-        etName = (EditText) findViewById(R.id.name);
-        etPopulation = (EditText) findViewById(R.id.population);
+        etName = findViewById(R.id.name);
+        etPopulation = findViewById(R.id.population);
 
         adapter = ArrayAdapter.createFromResource(this, R.array.type_names, android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -101,14 +103,12 @@ public class SettlementActivity extends AppCompatActivity {
 
     private void saveSettlement(Settlement settlement) {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
-        settlement.setId(rma.getDB().dbInsert(settlement));
+        settlement.setId(MainActivity.rma.getDB().dbInsert(settlement));
     }
 
     private void updateSettlement(Settlement settlement) {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
-        rma.getDB().dbUpdateById(settlement);
+        MainActivity.rma.getDB().dbUpdateById(settlement);
     }
 
     private boolean validateData() {

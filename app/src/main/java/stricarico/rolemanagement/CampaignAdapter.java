@@ -1,5 +1,7 @@
 package stricarico.rolemanagement;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
@@ -12,13 +14,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class SettlementAdapter extends RecyclerView.Adapter {
+public class CampaignAdapter extends RecyclerView.Adapter {
 
-    private List<Settlement> listItems;
-    private SettlementFragment fragment;
+    private List<Campaign> listItems;
+    private CampaignFragment fragment;
     private int position;
 
-    public SettlementAdapter(List<Settlement> listItem, SettlementFragment fragment) {
+    public CampaignAdapter(List<Campaign> listItem, CampaignFragment fragment) {
         this.listItems = listItem;
         this.fragment = fragment;
     }
@@ -26,8 +28,7 @@ public class SettlementAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.settlement_list_item, parent, false);
-
+                .inflate(R.layout.campaign_list_item, parent, false);
         return new ListViewHolder(view);
     }
 
@@ -45,11 +46,18 @@ public class SettlementAdapter extends RecyclerView.Adapter {
     }
 
     @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+
+        ((ListViewHolder) holder).itemView.setOnLongClickListener(null);
+        super.onViewRecycled(holder);
+    }
+
+    @Override
     public int getItemCount() {
         return listItems.size();
     }
 
-    public Settlement getItem(int position) {
+    public Campaign getItem(int position) {
         return listItems.get(position);
     }
 
@@ -63,47 +71,37 @@ public class SettlementAdapter extends RecyclerView.Adapter {
 
     private class ListViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
 
-        private TextView textViewName, textViewType, textViewPopulation;
+        private TextView textViewName;
 
 
         public ListViewHolder(View itemView) {
             super(itemView);
 
             textViewName = itemView.findViewById(R.id.name);
-            textViewType = itemView.findViewById(R.id.type);
-            textViewPopulation = itemView.findViewById(R.id.population);
 
             itemView.setOnCreateContextMenuListener(this);
         }
 
         public void bindView(final int position) {
-            final Settlement listItem = listItems.get(position);
+
+            final Campaign listItem = listItems.get(position);
+            Long selectedCampaignId = null;
+
+            if (MainActivity.rma.checkIfSharedPreferencesContainsKey("selectedCampaign"))
+                selectedCampaignId = MainActivity.rma.getSelectedCampaign().getId();
 
             textViewName.setText(listItem.getName());
 
-            switch (listItem.getType()) {
-                case 0:
-                    textViewType.setText("Aldea");
-                    break;
-                case 1:
-                    textViewType.setText("Pueblo");
-                    break;
-                case 2:
-                    textViewType.setText("Ciudad");
-                    break;
-            }
-
-            textViewPopulation.setText(String.valueOf(listItem.getPopulation()) + " habitantes");
-
-            if ((position & 1) == 0)
-                itemView.findViewById(R.id.settlementCardView).setBackgroundColor(Color.parseColor("#f5f5f5"));
+            if (selectedCampaignId != null)
+                if (listItem.getId() == selectedCampaignId)
+                    textViewName.setBackgroundColor(Color.parseColor("#567845"));
         }
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
             MenuInflater menuInflater = fragment.getActivity().getMenuInflater();
-            menuInflater.inflate(R.menu.settlement_context_menu, menu);
+            menuInflater.inflate(R.menu.campaign_context_menu, menu);
         }
     }
 }

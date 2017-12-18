@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorError">#FF0000</color>
+    <color name="colorSelected">#567845</color>
+    <color name="evenItem">#f5f5f5</color>
 </resources>

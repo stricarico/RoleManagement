@@ -1,5 +1,7 @@
 package stricarico.rolemanagement;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,29 +11,40 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static RoleManagementApplication rma;
+    public static Toolbar mainToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        rma = (RoleManagementApplication)getApplicationContext();
+        mainToolbar = findViewById(R.id.app_bar);
+        setSupportActionBar(mainToolbar);
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, drawer, mainToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frameLayout, new CampaignFragment());
+        ft.commit();
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -44,17 +57,19 @@ public class MainActivity extends AppCompatActivity
 
         switch (id) {
             case R.id.fragmentHome:
-                Intent homeIntent = new Intent(this, MainActivity.class);
-                startActivity(homeIntent);
+                fragment = new CampaignFragment();
                 break;
             case R.id.fragmentCharacter:
-                fragment = new CharacterFragment();
+                if (checkIfAnyCampaignIsSelected()) fragment = new CharacterFragment();
                 break;
             case R.id.fragmentSettlement:
-                fragment = new SettlementFragment();
+                if (checkIfAnyCampaignIsSelected()) fragment = new SettlementFragment();
                 break;
             case R.id.fragmentProfession:
-                fragment = new ProfessionFragment();
+                if (checkIfAnyCampaignIsSelected()) fragment = new ProfessionFragment();
+                break;
+            default:
+                fragment = new CampaignFragment();
                 break;
         }
 
@@ -64,8 +79,36 @@ public class MainActivity extends AppCompatActivity
             ft.commit();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+    private boolean checkIfAnyCampaignIsSelected() {
+
+        boolean selectedCampaign = rma.checkIfSharedPreferencesContainsKey("selectedCampaign");
+
+        if (!selectedCampaign) alertThatThereIsNoCampaignSelected();
+
+        return selectedCampaign;
+    }
+
+    private void alertThatThereIsNoCampaignSelected() {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle("Camapaña no Seleccionada");
+        alert.setMessage("Para poder acceder " +
+                "a cualquier otro menú de la aplicación, " +
+                "primero debe seleccionar una Camapaña");
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alert.show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        db.execSQL(Campaign.tableCreationString());
         db.execSQL(CharacterRelation.tableCreationString());
         db.execSQL(Character.tableCreationString());
         db.execSQL(Settlement.tableCreationString());
@@ -62,6 +63,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(table, "ID=?", new String[]{id});
     }
 
+    public Campaign dbSelectCampaignById(String id) {
+
+        String query = "SELECT * FROM CAMPAIGN WHERE ID=" + id;
+        Cursor cursor = this.getDb().rawQuery(query, null);
+
+        Campaign campaign;
+
+        cursor.moveToNext();
+
+        campaign = new Campaign(
+                cursor.getString(2)
+        );
+        campaign.setId(Long.parseLong(cursor.getString(0)));
+        campaign.setTs(Long.parseLong(cursor.getString(1)));
+
+        cursor.close();
+
+        return campaign;
+    }
+
+    public List<Campaign> dbSelectAllCampaigns() {
+
+        String query = "SELECT * FROM CAMPAIGN ORDER BY NAME ASC";
+        Cursor cursor = this.getDb().rawQuery(query, new String[]{});
+
+        List<Campaign> listItems = new ArrayList();
+
+        Campaign campaign;
+
+        while (cursor.moveToNext()) {
+            campaign = new Campaign(
+                    cursor.getString(2)
+            );
+            campaign.setId(Long.parseLong(cursor.getString(0)));
+            campaign.setTs(Long.parseLong(cursor.getString(1)));
+
+            listItems.add(campaign);
+        }
+
+        cursor.close();
+
+        return listItems;
+    }
+
     public Character dbSelectCharacterById(String id) {
 
         String query = "SELECT * FROM CHARACTER WHERE ID=" + id;
@@ -74,15 +119,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         character = new Character(
                 cursor.getString(2),
                 Integer.parseInt(cursor.getString(3)),
-                dbSelectSettlementById(cursor.getString(4)),
-                dbSelectProfessionById(cursor.getString(5)),
+                dbSelectCampaignById(cursor.getString(4)),
+                dbSelectSettlementById(cursor.getString(5)),
+                dbSelectProfessionById(cursor.getString(6)),
                 new String[] {
-                        cursor.getString(6),
                         cursor.getString(7),
-                        cursor.getString(8)
+                        cursor.getString(8),
+                        cursor.getString(9)
                 },
-                cursor.getString(9),
-                cursor.getString(10)
+                cursor.getString(10),
+                cursor.getString(11)
         );
         character.setId(Long.parseLong(cursor.getString(0)));
         character.setTs(Long.parseLong(cursor.getString(1)));
@@ -105,15 +151,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             character = new Character(
                     cursor.getString(2),
                     Integer.parseInt(cursor.getString(3)),
-                    dbSelectSettlementById(cursor.getString(4)),
-                    dbSelectProfessionById(cursor.getString(5)),
+                    dbSelectCampaignById(cursor.getString(4)),
+                    dbSelectSettlementById(cursor.getString(5)),
+                    dbSelectProfessionById(cursor.getString(6)),
                     new String[] {
-                            cursor.getString(6),
                             cursor.getString(7),
-                            cursor.getString(8)
+                            cursor.getString(8),
+                            cursor.getString(9)
                     },
-                    cursor.getString(9),
-                    cursor.getString(10)
+                    cursor.getString(10),
+                    cursor.getString(11)
             );
             character.setId(Long.parseLong(cursor.getString(0)));
             character.setTs(Long.parseLong(cursor.getString(1)));
@@ -139,15 +186,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             character = new Character(
                     cursor.getString(2),
                     Integer.parseInt(cursor.getString(3)),
-                    dbSelectSettlementById(cursor.getString(4)),
-                    dbSelectProfessionById(cursor.getString(5)),
+                    dbSelectCampaignById(cursor.getString(4)),
+                    dbSelectSettlementById(cursor.getString(5)),
+                    dbSelectProfessionById(cursor.getString(6)),
                     new String[] {
-                            cursor.getString(6),
                             cursor.getString(7),
-                            cursor.getString(8)
+                            cursor.getString(8),
+                            cursor.getString(9)
                     },
-                    cursor.getString(9),
-                    cursor.getString(10)
+                    cursor.getString(10),
+                    cursor.getString(11)
             );
             character.setId(Long.parseLong(cursor.getString(0)));
             character.setTs(Long.parseLong(cursor.getString(1)));
@@ -245,7 +293,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         settlement = new Settlement(
                 cursor.getString(2),
                 Integer.parseInt(cursor.getString(3)),
-                Integer.parseInt(cursor.getString(4))
+                Integer.parseInt(cursor.getString(4)),
+                dbSelectCampaignById(cursor.getString(5))
         );
         settlement.setId(Long.parseLong(cursor.getString(0)));
         settlement.setTs(Long.parseLong(cursor.getString(1)));
@@ -255,9 +304,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return settlement;
     }
 
-    public List<Settlement> dbSelectAllSettlements() {
+    public List<Settlement> dbSelectAllSettlementsByCampaign(String campaignId) {
 
-        String query = "SELECT * FROM SETTLEMENT ORDER BY NAME ASC";
+
+        String query = "SELECT * FROM SETTLEMENT WHERE CAMPAIGN_ID=" + campaignId + " ORDER BY NAME ASC";
         Cursor cursor = this.getDb().rawQuery(query, new String[]{});
 
         List<Settlement> listItems = new ArrayList();
@@ -268,7 +318,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             settlement = new Settlement(
                     cursor.getString(2),
                     Integer.parseInt(cursor.getString(3)),
-                    Integer.parseInt(cursor.getString(4))
+                    Integer.parseInt(cursor.getString(4)),
+                    dbSelectCampaignById(cursor.getString(5))
             );
             settlement.setId(Long.parseLong(cursor.getString(0)));
             settlement.setTs(Long.parseLong(cursor.getString(1)));

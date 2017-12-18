@@ -29,6 +29,12 @@
     <string name="character_relation_judgement">Perspectiva</string>
     <string name="title_activity_character_relation">Relaciones del Personaje</string>
     <string name="title_activity_character_relation_creation">Nueva Relación</string>
+    <string name="delete">Eliminar</string>
+    <string name="edit">Modificar</string>
+    <string name="relationships">Relaciones</string>
+    <string name="select">Seleccionar</string>
+    <string name="title_activity_campaign">Nueva Campaña</string>
+    <string name="campaigns">Campañas</string>
 
     <string-array name="type_names">
         <item>Aldea</item>

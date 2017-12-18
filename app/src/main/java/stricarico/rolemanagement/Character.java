@@ -12,6 +12,7 @@ public class Character extends AbstractPersistentObject {
 
     private String name;
     private int age;
+    private Campaign campaign;
     private Settlement settlement;
     private Profession profession;
     private String[] generalAttitude;
@@ -21,6 +22,7 @@ public class Character extends AbstractPersistentObject {
     public Character(
             String characterName,
             int characterAge,
+            Campaign characterCampaign,
             Settlement characterSettlement,
             Profession characterProfession,
             String[] characterGeneralAttitude,
@@ -29,6 +31,7 @@ public class Character extends AbstractPersistentObject {
     ) {
         this.name = characterName;
         this.age = characterAge;
+        this.campaign = characterCampaign;
         this.settlement = characterSettlement;
         this.profession = characterProfession;
         this.generalAttitude = characterGeneralAttitude;
@@ -45,7 +48,8 @@ public class Character extends AbstractPersistentObject {
                 "ID                         INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "TS                         DATE," +
                 "NAME                       TEXT," +
-                "AGE                        INT," +
+                "AGE                        INTEGER," +
+                "CAMPAIGN_ID                INTEGER," +
                 "SETTLEMENT_ID              INTEGER," +
                 "PROFESSION_ID              INTEGER," +
                 "HOSTILE_ATTITUDE           TEXT," +
@@ -71,6 +75,14 @@ public class Character extends AbstractPersistentObject {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(Campaign campaign) {
+        this.campaign = campaign;
     }
 
     public Settlement getSettlement() {
@@ -126,6 +138,7 @@ public class Character extends AbstractPersistentObject {
         contentValues.put("TS", System.currentTimeMillis());
         contentValues.put("NAME", this.name);
         contentValues.put("AGE", this.age);
+        contentValues.put("CAMPAIGN_ID", this.campaign.getId());
         contentValues.put("SETTLEMENT_ID", this.settlement.getId());
         contentValues.put("PROFESSION_ID", this.profession.getId());
         contentValues.put("HOSTILE_ATTITUDE", this.generalAttitude[0]);

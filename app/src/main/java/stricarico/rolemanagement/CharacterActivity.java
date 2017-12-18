@@ -33,6 +33,7 @@ public class CharacterActivity extends AppCompatActivity {
     private CharacterProfessionAdapter professionAdapter;
 
     private Character character;
+    private Campaign campaign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class CharacterActivity extends AppCompatActivity {
 
         insertButton = (Button) findViewById(R.id.insertButton);
         updateButton = (Button) findViewById(R.id.updateButton);
+        campaign = MainActivity.rma.getSelectedCampaign();
 
         insertButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +52,7 @@ public class CharacterActivity extends AppCompatActivity {
                     character = new Character(
                             etName.getText().toString(),
                             Integer.parseInt(etAge.getText().toString()),
+                            campaign,
                             settlementAdapter.getItem(settlementSpinner.getSelectedItemPosition()),
                             professionAdapter.getItem(professionSpinner.getSelectedItemPosition()),
                             new String[]{
@@ -107,14 +110,14 @@ public class CharacterActivity extends AppCompatActivity {
         etStrengths = (EditText) findViewById(R.id.strengths);
         etWeaknesses = (EditText) findViewById(R.id.weaknesses);
 
-        List<Settlement> settlements = rma.getDB().dbSelectAllSettlements();
+        List<Settlement> settlements = rma.getDB().dbSelectAllSettlementsByCampaign(String.valueOf(campaign.getId()));
         List<Profession> professions = rma.getDB().dbSelectAllProfessions();
 
         settlementAdapter = new CharacterSettlementAdapter(this, android.R.layout.simple_spinner_item, settlements);
         professionAdapter = new CharacterProfessionAdapter(this, android.R.layout.simple_spinner_item, professions);
 
-        settlementSpinner = (Spinner) findViewById(R.id.settlement);
-        professionSpinner = (Spinner) findViewById(R.id.profession);
+        settlementSpinner = findViewById(R.id.settlement);
+        professionSpinner = findViewById(R.id.profession);
 
         settlementSpinner.setAdapter(settlementAdapter);
         professionSpinner.setAdapter(professionAdapter);

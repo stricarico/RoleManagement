@@ -5,7 +5,7 @@
         <item
             android:id="@+id/fragmentHome"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/home" />
+            android:title="@string/campaigns" />
         <item
             android:id="@+id/fragmentCharacter"
             android:icon="@drawable/ic_character_black_24dp"
