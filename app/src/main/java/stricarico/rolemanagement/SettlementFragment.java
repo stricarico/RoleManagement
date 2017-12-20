@@ -14,18 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import java.util.List;
 
+import static stricarico.rolemanagement.MainActivity.rma;
+
 public class SettlementFragment extends Fragment {
 
-    private List<Settlement> listItems;
     private SettlementAdapter settlementAdapter;
     private RecyclerView recyclerView;
-    private Campaign selectedCampaign;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.settlement_fragment, container, false);
 
         recyclerView = view.findViewById(R.id.settlementRecyclerView);
-        selectedCampaign = MainActivity.rma.getSelectedCampaign();
 
         FloatingActionButton fab = view.findViewById(R.id.newSettlement);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +49,7 @@ public class SettlementFragment extends Fragment {
 
         MainActivity.mainToolbar.setTitle(R.string.settlements);
 
-        listItems = getItemsToList();
+        List<Settlement> listItems = getItemsToList();
 
         settlementAdapter = new SettlementAdapter(listItems, this);
         recyclerView.setAdapter(settlementAdapter);
@@ -62,10 +61,9 @@ public class SettlementFragment extends Fragment {
 
     private List<Settlement> getItemsToList() {
 
-        List<Settlement> listSettlements = MainActivity.rma.getDB()
-                .dbSelectAllSettlementsByCampaign(String.valueOf(selectedCampaign.getId()));
-
-        return listSettlements;
+        return rma.getDB()
+                .dbSelectAllSettlementsByCampaign(
+                        String.valueOf(rma.getSelectedCampaign().getId()));
     }
 
     @Override
@@ -169,13 +167,13 @@ public class SettlementFragment extends Fragment {
 
     private void deleteSettlementById(String tableName, String id) {
 
-        MainActivity.rma.getDB().dbDeleteById(tableName, id);
+        rma.getDB().dbDeleteById(tableName, id);
 
         onResume();
     }
 
     public String validateIfSettlementIsRelatedToACharacter(String id) {
 
-        return MainActivity.rma.getDB().dbCheckIfSettlementIsRelatedToACharacter(id);
+        return rma.getDB().dbCheckIfSettlementIsRelatedToACharacter(id);
     }
 }

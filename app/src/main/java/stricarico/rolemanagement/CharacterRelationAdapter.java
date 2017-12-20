@@ -2,8 +2,11 @@ package stricarico.rolemanagement;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,6 +18,7 @@ public class CharacterRelationAdapter extends RecyclerView.Adapter {
 
     private List<CharacterRelation> listItems;
     private CharacterRelationActivity activity;
+    private int position;
 
     public CharacterRelationAdapter(List<CharacterRelation> listItem, CharacterRelationActivity activity) {
         this.listItems = listItem;
@@ -29,8 +33,16 @@ public class CharacterRelationAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+
         ((ListViewHolder) holder).bindView(position);
+        ((ListViewHolder) holder).itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setPosition(holder.getPosition());
+                return false;
+            }
+        });
     }
 
     @Override
@@ -42,10 +54,17 @@ public class CharacterRelationAdapter extends RecyclerView.Adapter {
         return listItems.get(position);
     }
 
-    private class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    private class ListViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
 
         private TextView textViewRelatedCharacter, textViewJudgement;
-        private Button buttonUpdate, buttonDelete;
 
 
         public ListViewHolder(View itemView) {
@@ -54,10 +73,7 @@ public class CharacterRelationAdapter extends RecyclerView.Adapter {
             textViewRelatedCharacter = itemView.findViewById(R.id.relatedCharacter);
             textViewJudgement = itemView.findViewById(R.id.judgement);
 
-            buttonUpdate = itemView.findViewById(R.id.editButton);
-            buttonDelete = itemView.findViewById(R.id.deleteButton);
-
-            itemView.setOnClickListener(this);
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         public void bindView(final int position) {
@@ -66,43 +82,15 @@ public class CharacterRelationAdapter extends RecyclerView.Adapter {
             textViewRelatedCharacter.setText(listItem.getCharacterTwo().getName());
             textViewJudgement.setText(listItem.getJudgement());
 
-            buttonUpdate.setBackgroundResource(R.drawable.ic_edit_black_24dp);
-            buttonDelete.setBackgroundResource(R.drawable.ic_delete_black_24dp);
-
-            buttonUpdate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    activity.updateItemAtPosition(position);
-                }
-            });
-
-            buttonDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    AlertDialog.Builder alert = new AlertDialog.Builder(v.getContext());
-                    alert.setTitle("Eliminar Relación entre Personajes");
-                    alert.setMessage("¿Está seguro que desea eliminar la relación entre el Personaje " + listItem.getCharacterOne().getName() + " y el Personaje " + listItem.getCharacterTwo().getName() + "?");
-                    alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            activity.deleteItemAtPosition(position);
-                            listItems.remove(position);
-                        }
-                    });
-                    alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    alert.show();
-                }
-            });
+            if ((position & 1) == 0)
+                itemView.findViewById(R.id.characterRelationCardView).setBackgroundColor(Color.parseColor("#eeeeee"));
         }
 
-        public void onClick(View view) {
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+            MenuInflater menuInflater = activity.getMenuInflater();
+            menuInflater.inflate(R.menu.standard_context_menu, menu);
         }
     }
 }

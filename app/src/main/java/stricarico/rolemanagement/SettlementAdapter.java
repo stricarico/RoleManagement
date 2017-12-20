@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -96,14 +95,14 @@ public class SettlementAdapter extends RecyclerView.Adapter {
             textViewPopulation.setText(String.valueOf(listItem.getPopulation()) + " habitantes");
 
             if ((position & 1) == 0)
-                itemView.findViewById(R.id.settlementCardView).setBackgroundColor(Color.parseColor("#f5f5f5"));
+                itemView.findViewById(R.id.settlementCardView).setBackgroundColor(Color.parseColor("#eeeeee"));
         }
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
             MenuInflater menuInflater = fragment.getActivity().getMenuInflater();
-            menuInflater.inflate(R.menu.settlement_context_menu, menu);
+            menuInflater.inflate(R.menu.standard_context_menu, menu);
         }
     }
 }

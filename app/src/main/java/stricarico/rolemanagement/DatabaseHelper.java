@@ -138,9 +138,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return character;
     }
 
-    public List<Character> dbSelectAllCharacters() {
+    public List<Character> dbSelectAllCharactersByCampaign(String campaignId) {
 
-        String query = "SELECT * FROM CHARACTER ORDER BY NAME ASC";
+        String query = "SELECT * FROM CHARACTER WHERE CAMPAIGN_ID=" + campaignId + " ORDER BY NAME ASC";
         Cursor cursor = this.getDb().rawQuery(query, new String[]{});
 
         List<Character> listItems = new ArrayList();
@@ -173,9 +173,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return listItems;
     }
 
-    public List<Character> dbSelectAllCharactersButCurrent(String id) {
+    public List<Character> dbSelectAllCharactersButCurrentByCampaign(String id, String campaignId) {
 
-        String query = "SELECT * FROM CHARACTER WHERE ID!=" + id + " ORDER BY NAME ASC";
+        String query = "SELECT * FROM CHARACTER WHERE ID!=" + id
+                + " AND CAMPAIGN_ID=" + campaignId + " ORDER BY NAME ASC";
         Cursor cursor = this.getDb().rawQuery(query, new String[]{});
 
         List<Character> listItems = new ArrayList();
@@ -221,9 +222,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else return null;
     }
 
-    public boolean dbCheckIfThereIsAnyOtherCharacter(String id) {
+    public boolean dbCheckIfThereIsAnyOtherCharacterByCampaign(String id, String campaignId) {
 
-        String query = "SELECT * FROM CHARACTER WHERE ID!=" + id;
+        String query = "SELECT * FROM CHARACTER WHERE ID!=" + id + " AND CAMPAIGN_ID=" + campaignId;
         Cursor cursor = this.getDb().rawQuery(query, new String[]{});
 
         if (cursor.moveToNext()) {
@@ -343,9 +344,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else return null;
     }
 
-    public boolean dbCheckIfThereIsAnySettlement() {
+    public boolean dbCheckIfThereIsAnySettlementByCampaign(String campaignId) {
 
-        String query = "SELECT * FROM SETTLEMENT";
+        String query = "SELECT * FROM SETTLEMENT WHERE CAMPAIGN_ID=" + campaignId;
         Cursor cursor = this.getDb().rawQuery(query, new String[]{});
 
         if (cursor.moveToNext()) {
@@ -365,7 +366,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         profession = new Profession(
                 cursor.getString(2),
-                cursor.getString(3)
+                cursor.getString(3),
+                dbSelectCampaignById(cursor.getString(4))
         );
         profession.setId(Long.parseLong(cursor.getString(0)));
         profession.setTs(Long.parseLong(cursor.getString(1)));
@@ -375,9 +377,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return profession;
     }
 
-    public List<Profession> dbSelectAllProfessions() {
+    public List<Profession> dbSelectAllProfessionsByCampaign(String campaignId) {
 
-        String query = "SELECT * FROM PROFESSION ORDER BY NAME ASC";
+        String query = "SELECT * FROM PROFESSION WHERE CAMPAIGN_ID=" + campaignId + " ORDER BY NAME ASC";
         Cursor cursor = this.getDb().rawQuery(query, null);
 
         List<Profession> listItems = new ArrayList();
@@ -387,7 +389,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             profession = new Profession(
                     cursor.getString(2),
-                    cursor.getString(3)
+                    cursor.getString(3),
+                    dbSelectCampaignById(cursor.getString(4))
             );
             profession.setId(Long.parseLong(cursor.getString(0)));
             profession.setTs(Long.parseLong(cursor.getString(1)));
@@ -411,9 +414,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else return null;
     }
 
-    public boolean dbCheckIfThereIsAnyProfession() {
+    public boolean dbCheckIfThereIsAnyProfessionByCampaign(String campaignId) {
 
-        String query = "SELECT * FROM PROFESSION";
+        String query = "SELECT * FROM PROFESSION WHERE CAMPAIGN_ID=" + campaignId;
         Cursor cursor = this.getDb().rawQuery(query, new String[]{});
 
         if (cursor.moveToNext()) {

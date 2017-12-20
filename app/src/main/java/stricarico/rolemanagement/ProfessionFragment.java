@@ -1,5 +1,7 @@
 package stricarico.rolemanagement;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,14 +9,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import static stricarico.rolemanagement.MainActivity.rma;
+
 public class ProfessionFragment extends Fragment {
 
-    private List<Profession> listItems;
     private ProfessionAdapter professionAdapter;
     private RecyclerView recyclerView;
 
@@ -46,21 +50,39 @@ public class ProfessionFragment extends Fragment {
 
         MainActivity.mainToolbar.setTitle(R.string.professions);
 
-        listItems = getItemsToList();
+        List<Profession> listItems = getItemsToList();
 
         professionAdapter = new ProfessionAdapter(listItems, this);
         recyclerView.setAdapter(professionAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
+        registerForContextMenu(recyclerView);
     }
 
     private List<Profession> getItemsToList() {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+        return rma.getDB()
+                .dbSelectAllProfessionsByCampaign(
+                        String.valueOf(rma.getSelectedCampaign().getId()));
+    }
 
-        List<Profession> listProfessions = rma.getDB().dbSelectAllProfessions();
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
 
-        return listProfessions;
+        int position = professionAdapter.getPosition();
+
+        switch (item.getItemId()) {
+
+            case R.id.edit:
+                updateItemAtPosition(position);
+                break;
+            case R.id.delete:
+                attemptToDeleteItemAtPosition(position);
+                break;
+        }
+
+        return super.onContextItemSelected(item);
     }
 
     public void updateItemAtPosition(int position) {
@@ -72,18 +94,86 @@ public class ProfessionFragment extends Fragment {
         startActivity(resultIntent);
     }
 
-    public void deleteItemAtPosition(int position) {
+    private void attemptToDeleteItemAtPosition (int position) {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
         Profession professionToDelete = professionAdapter.getItem(position);
-        rma.getDB().dbDeleteById(professionToDelete.getTableName(), String.valueOf(professionToDelete.getId()));
+        String relatedCharacter = validateIfProfessionIsRelatedToACharacter(
+                String.valueOf(professionToDelete.getId()));
+
+        if (relatedCharacter == null) {
+            askToDeleteProfession(
+                    professionToDelete.getName(),
+                    professionToDelete.getTableName(),
+                    String.valueOf(professionToDelete.getId())
+            );
+        }
+        else {
+            alertThatProfessionIsRelated(
+                    professionToDelete.getName(),
+                    relatedCharacter
+            );
+        }
+    }
+
+    private void askToDeleteProfession(
+            final String professionName,
+            final String professionTableName,
+            final String professionId) {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+
+        alert.setTitle("Eliminar Oficio");
+        alert.setMessage("¿Está seguro que desea eliminar el Oficio " + professionName + "?");
+
+        alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                deleteProfessionById(professionTableName, professionId);
+            }
+        });
+
+        alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alert.show();
+    }
+
+    private void alertThatProfessionIsRelated(
+            final String professionName,
+            final String characterName) {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+
+        alert.setTitle("Relaciones Dependientes");
+        alert.setMessage("El Oficio "
+                + professionName +
+                " está relacionado con el Personaje "
+                + characterName +
+                " y no se puede eliminar");
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alert.show();
+    }
+
+    private void deleteProfessionById(String tableName, String id) {
+
+        rma.getDB().dbDeleteById(tableName, id);
 
         onResume();
     }
 
     public String validateIfProfessionIsRelatedToACharacter(String id) {
-
-        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
 
         return rma.getDB().dbCheckIfProfessionIsRelatedToACharacter(id);
     }

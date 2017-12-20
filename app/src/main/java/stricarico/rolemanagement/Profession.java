@@ -8,10 +8,12 @@ public class Profession extends AbstractPersistentObject {
 
     private String name;
     private String duties;
+    private Campaign campaign;
 
-    public Profession(String name, String duties) {
+    public Profession(String name, String duties, Campaign campaign) {
         this.name = name;
         this.duties = duties;
+        this.campaign = campaign;
     }
 
     public String getName() {
@@ -33,11 +35,12 @@ public class Profession extends AbstractPersistentObject {
     public static String tableCreationString() {
 
         String table;
-        table = "CREATE TABLE PROFESSION (" +
+        table = "CREATE TABLE " + tableName + " (" +
                 "ID                         INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "TS                         DATE," +
                 "NAME                       TEXT," +
-                "DUTIES                     TEXT)";
+                "DUTIES                     TEXT," +
+                "CAMPAIGN_ID                INTEGER)";
 
         return table;
     }
@@ -55,6 +58,7 @@ public class Profession extends AbstractPersistentObject {
         contentValues.put("TS", System.currentTimeMillis());
         contentValues.put("NAME", this.name);
         contentValues.put("DUTIES", this.duties);
+        contentValues.put("CAMPAIGN_ID", this.campaign.getId());
 
         return contentValues;
     }

@@ -8,9 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class ProfessionActivity extends AppCompatActivity {
+import static stricarico.rolemanagement.MainActivity.rma;
 
-    private static Bundle bundle;
+public class ProfessionActivity extends AppCompatActivity {
 
     private EditText etName;
     private EditText etDuties;
@@ -24,18 +24,15 @@ public class ProfessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profession);
 
-        insertButton = (Button) findViewById(R.id.insertButton);
-        updateButton = (Button) findViewById(R.id.updateButton);
+        insertButton = findViewById(R.id.insertButton);
+        updateButton = findViewById(R.id.updateButton);
 
         insertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (validateData()) {
-                    profession = new Profession(
-                            etName.getText().toString(),
-                            etDuties.getText().toString()
-                    );
+                    profession = createProfession();
 
                     saveProfession(profession);
                     finish();
@@ -48,8 +45,7 @@ public class ProfessionActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (validateData()) {
-                    profession.setName(etName.getText().toString());
-                    profession.setDuties(etDuties.getText().toString());
+                    editProfession();
 
                     updateProfession(profession);
                     finish();
@@ -62,10 +58,9 @@ public class ProfessionActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        bundle = getIntent().getExtras();
+        initializeDataForCreation();
 
-        etName = (EditText) findViewById(R.id.name);
-        etDuties = (EditText) findViewById(R.id.duties);
+        Bundle bundle = getIntent().getExtras();
 
         if (bundle == null) {
 
@@ -74,27 +69,50 @@ public class ProfessionActivity extends AppCompatActivity {
         }
         else {
 
-            RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
             String id = bundle.getString("id", null);
             profession = rma.getDB().dbSelectProfessionById(id);
 
-            etName.setText(profession.getName());
-            etDuties.setText(profession.getDuties());
+            initializeDataForEdition();
 
             insertButton.setVisibility(View.GONE);
             updateButton.setVisibility(View.VISIBLE);
         }
     }
 
+    private void initializeDataForCreation() {
+
+        etName = findViewById(R.id.name);
+        etDuties = findViewById(R.id.duties);
+    }
+
+    private void initializeDataForEdition() {
+
+        etName.setText(profession.getName());
+        etDuties.setText(profession.getDuties());
+    }
+
+    private Profession createProfession() {
+
+        return new Profession(
+                etName.getText().toString(),
+                etDuties.getText().toString(),
+                rma.getSelectedCampaign()
+        );
+    }
+
+    private void editProfession() {
+
+        profession.setName(etName.getText().toString());
+        profession.setDuties(etDuties.getText().toString());
+    }
+
     private void saveProfession(Profession profession) {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
         profession.setId(rma.getDB().dbInsert(profession));
     }
 
     private void updateProfession(Profession profession) {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
         rma.getDB().dbUpdateById(profession);
     }
 

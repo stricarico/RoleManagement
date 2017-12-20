@@ -15,9 +15,10 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import static stricarico.rolemanagement.MainActivity.rma;
+
 public class CampaignFragment extends Fragment {
 
-    private List<Campaign> listItems;
     private CampaignAdapter campaignAdapter;
     private RecyclerView recyclerView;
 
@@ -49,7 +50,7 @@ public class CampaignFragment extends Fragment {
 
         MainActivity.mainToolbar.setTitle(R.string.campaigns);
 
-        listItems = MainActivity.rma.getDB().dbSelectAllCampaigns();
+        List<Campaign> listItems = rma.getDB().dbSelectAllCampaigns();
 
         campaignAdapter = new CampaignAdapter(listItems, this);
         recyclerView.setAdapter(campaignAdapter);
@@ -83,7 +84,7 @@ public class CampaignFragment extends Fragment {
     public void selectItemAtPosition(int position) {
 
         Campaign selectedCampaign = campaignAdapter.getItem(position);
-        MainActivity.rma.setSelectedCampaign(selectedCampaign.getId());
+        rma.setSelectedCampaign(selectedCampaign.getId());
 
         onResume();
     }
@@ -138,7 +139,7 @@ public class CampaignFragment extends Fragment {
 
     private void deleteCampaignById(String tableName, String id) {
 
-        MainActivity.rma.getDB().dbDeleteById(tableName, id);
+        rma.getDB().dbDeleteById(tableName, id);
 
         onResume();
     }

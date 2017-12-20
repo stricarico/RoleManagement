@@ -19,10 +19,6 @@ public class CharacterRelation extends AbstractPersistentObject {
         return characterOne;
     }
 
-    public void setCharacterOne(Character characterOne) {
-        this.characterOne = characterOne;
-    }
-
     public Character getCharacterTwo() {
         return characterTwo;
     }

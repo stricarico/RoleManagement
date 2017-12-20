@@ -1,39 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/characterRelationCardView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="2dp">
+        android:layout_height="wrap_content"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation">
 
-        <TextView
-            android:id="@+id/relatedCharacter"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="35sp" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/judgement"
-            android:layout_width="300dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="40dp"
-            android:textSize="10sp" />
+            <TextView
+                android:id="@+id/relatedCharacter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:fontFamily="@font/roboto"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/editButton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="325dp"/>
+            <TextView
+                android:id="@+id/judgement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/relatedCharacter"
+                android:fontFamily="@font/roboto"
+                android:paddingTop="4dp"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:paddingBottom="8dp"
+                android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/deleteButton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginLeft="325dp"/>
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

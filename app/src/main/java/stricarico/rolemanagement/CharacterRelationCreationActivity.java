@@ -9,9 +9,9 @@ import android.widget.Spinner;
 
 import java.util.List;
 
-public class CharacterRelationCreationActivity extends AppCompatActivity {
+import static stricarico.rolemanagement.MainActivity.rma;
 
-    private static Bundle bundle;
+public class CharacterRelationCreationActivity extends AppCompatActivity {
 
     private Spinner spinner;
 
@@ -30,18 +30,14 @@ public class CharacterRelationCreationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character_relation_creation);
 
-        insertButton = (Button) findViewById(R.id.insertButton);
-        updateButton = (Button) findViewById(R.id.updateButton);
+        insertButton = findViewById(R.id.insertButton);
+        updateButton = findViewById(R.id.updateButton);
 
         insertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                characterRelation = new CharacterRelation(
-                        character,
-                        adapter.getItem(spinner.getSelectedItemPosition()),
-                        etJudgement.getText().toString()
-                );
+                createCharacterRelation();
 
                 saveCharacterRelation(characterRelation);
                 finish();
@@ -52,8 +48,7 @@ public class CharacterRelationCreationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                characterRelation.setCharacterTwo(adapter.getItem(spinner.getSelectedItemPosition()));
-                characterRelation.setJudgement(etJudgement.getText().toString());
+                editCharacterRelation();
 
                 updateCharacterRelation(characterRelation);
                 finish();
@@ -65,19 +60,11 @@ public class CharacterRelationCreationActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
+        Bundle bundle = getIntent().getExtras();
+        String characterId = bundle.getString("character_id", null);
+        character = rma.getDB().dbSelectCharacterById(characterId);
 
-        bundle = getIntent().getExtras();
-        String character_id = bundle.getString("character_id", null);
-        character = rma.getDB().dbSelectCharacterById(character_id);
-
-        etJudgement = (EditText) findViewById(R.id.judgement);
-
-        List<Character> characters = rma.getDB().dbSelectAllCharactersButCurrent(character_id);
-        characters.remove(character);
-        adapter = new CharacterCharacterAdapter(this, android.R.layout.simple_spinner_item, characters);
-        spinner = (Spinner) findViewById(R.id.relatedCharacter);
-        spinner.setAdapter(adapter);
+        initializeDataForCreation(characterId);
 
         String id = bundle.getString("id", null);
 
@@ -88,27 +75,57 @@ public class CharacterRelationCreationActivity extends AppCompatActivity {
         }
         else {
 
-
             characterRelation = rma.getDB().dbSelectCharacterRelationById(id);
 
-            etJudgement.setText(characterRelation.getJudgement());
-
-            spinner.setSelection(adapter.getPosition(characterRelation.getCharacterTwo().getId()));
+            initializeDataForEdition();
 
             insertButton.setVisibility(View.GONE);
             updateButton.setVisibility(View.VISIBLE);
         }
     }
 
+    private void initializeDataForCreation(String characterId) {
+
+        etJudgement = findViewById(R.id.judgement);
+
+        List<Character> characters = rma.getDB()
+                .dbSelectAllCharactersButCurrentByCampaign(
+                        characterId, String.valueOf(rma.getSelectedCampaign().getId()));
+
+        characters.remove(character);
+        adapter = new CharacterCharacterAdapter(this, android.R.layout.simple_spinner_item, characters);
+        spinner = findViewById(R.id.relatedCharacter);
+        spinner.setAdapter(adapter);
+    }
+
+    private void initializeDataForEdition() {
+
+        etJudgement.setText(characterRelation.getJudgement());
+        spinner.setSelection(adapter.getPosition(characterRelation.getCharacterTwo().getId()));
+    }
+
+    private void createCharacterRelation() {
+
+        characterRelation = new CharacterRelation(
+                character,
+                adapter.getItem(spinner.getSelectedItemPosition()),
+                etJudgement.getText().toString()
+        );
+    }
+
+    private void editCharacterRelation() {
+
+        characterRelation.setCharacterTwo(adapter.getItem(spinner.getSelectedItemPosition()));
+        characterRelation.setJudgement(etJudgement.getText().toString());
+    }
+
     private void saveCharacterRelation(CharacterRelation characterRelation) {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
         characterRelation.setId(rma.getDB().dbInsert(characterRelation));
     }
 
     private void updateCharacterRelation(CharacterRelation characterRelation) {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getApplicationContext();
         rma.getDB().dbUpdateById(characterRelation);
     }
 

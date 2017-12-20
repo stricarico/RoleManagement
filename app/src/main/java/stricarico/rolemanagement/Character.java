@@ -39,12 +39,10 @@ public class Character extends AbstractPersistentObject {
         this.weaknesses = characterWeaknesses;
     }
 
-
-
     public static String tableCreationString() {
 
         String table;
-        table = "CREATE TABLE CHARACTER (" +
+        table = "CREATE TABLE " + tableName + " (" +
                 "ID                         INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "TS                         DATE," +
                 "NAME                       TEXT," +
@@ -75,14 +73,6 @@ public class Character extends AbstractPersistentObject {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public Campaign getCampaign() {
-        return campaign;
-    }
-
-    public void setCampaign(Campaign campaign) {
-        this.campaign = campaign;
     }
 
     public Settlement getSettlement() {

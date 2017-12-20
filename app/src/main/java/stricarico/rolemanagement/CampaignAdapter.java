@@ -92,9 +92,14 @@ public class CampaignAdapter extends RecyclerView.Adapter {
 
             textViewName.setText(listItem.getName());
 
+            if ((position & 1) == 0)
+                itemView.findViewById(R.id.campaignCardView).setBackgroundColor(Color.parseColor("#eeeeee"));
+
             if (selectedCampaignId != null)
-                if (listItem.getId() == selectedCampaignId)
-                    textViewName.setBackgroundColor(Color.parseColor("#567845"));
+                if (listItem.getId() == selectedCampaignId) {
+                    itemView.findViewById(R.id.campaignCardView).setBackgroundColor(Color.parseColor("#b2dfdb"));
+                    itemView.findViewById(R.id.campaignCardView).setElevation(8);
+                }
         }
 
         @Override

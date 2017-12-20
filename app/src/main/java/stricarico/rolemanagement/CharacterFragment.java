@@ -15,9 +15,9 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-public class CharacterFragment extends Fragment {
+import static stricarico.rolemanagement.MainActivity.rma;
 
-    private RoleManagementApplication rma;
+public class CharacterFragment extends Fragment {
 
     private List<Character> listItems;
     private CharacterAdapter characterAdapter;
@@ -26,7 +26,6 @@ public class CharacterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.character_fragment, container, false);
 
-        rma = (RoleManagementApplication)getActivity().getApplicationContext();
         recyclerView = view.findViewById(R.id.characterRecyclerView);
 
         FloatingActionButton fab = view.findViewById(R.id.newCharacter);
@@ -40,30 +39,8 @@ public class CharacterFragment extends Fragment {
                          Intent resultIntent = new Intent(getActivity(), CharacterActivity.class);
                          startActivity(resultIntent);
                      }
-                     else {
-
-                         AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
-                         alert.setTitle("Relaciones Dependientes");
-                         alert.setMessage("No se puede crear un nuevo Personaje sin haber creado al menos un Oficio");
-                         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                             @Override
-                             public void onClick(DialogInterface dialog, int which) {
-                             }
-                         });
-                         alert.show();
-                     }
-                 } else {
-
-                     AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
-                     alert.setTitle("Relaciones Dependientes");
-                     alert.setMessage("No se puede crear un nuevo Personaje sin haber creado al menos un Asentamiento");
-                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                         @Override
-                         public void onClick(DialogInterface dialog, int which) {
-                         }
-                     });
-                     alert.show();
-                 }
+                     else alertThatThereIsNoProfessionCreated();
+                 } else alertThatThereIsNoSettlementCreated();
             }
         });
 
@@ -81,7 +58,9 @@ public class CharacterFragment extends Fragment {
 
         MainActivity.mainToolbar.setTitle(R.string.characters);
 
-        listItems = rma.getDB().dbSelectAllCharacters();
+        listItems = rma.getDB()
+                .dbSelectAllCharactersByCampaign(
+                        String.valueOf(rma.getSelectedCampaign().getId()));
 
         characterAdapter = new CharacterAdapter(listItems, this);
         recyclerView.setAdapter(characterAdapter);
@@ -99,8 +78,10 @@ public class CharacterFragment extends Fragment {
         switch (item.getItemId()) {
 
             case R.id.relationships:
+                attemptToRelateItemAtPosition(position);
                 break;
             case R.id.edit:
+                updateItemAtPosition(position);
                 break;
             case R.id.delete:
                 attemptToDeleteItemAtPosition(position);
@@ -110,7 +91,41 @@ public class CharacterFragment extends Fragment {
         return super.onContextItemSelected(item);
     }
 
-    public void updateItemAtPosition(int position) {
+    private void attemptToRelateItemAtPosition(int position) {
+
+        Character characterToRelate = characterAdapter.getItem(position);
+        String characterToRelateId = String.valueOf(characterToRelate.getId());
+
+        if (validateIfThereIsAnyOtherCharacter(characterToRelateId))
+            relateItemById(characterToRelateId);
+        else alertThatThereIsNoOtherCharacterCreated();
+    }
+
+    private void alertThatThereIsNoOtherCharacterCreated() {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+
+        alert.setTitle("Relaciones Dependientes");
+        alert.setMessage("No se puede relacionar este Personaje con otro," +
+                " dado que aún no se ha creado otro Personaje con el cual relacionarlo");
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alert.show();
+    }
+
+    private void relateItemById(String characterId) {
+
+        Intent resultIntent = new Intent(getActivity(), CharacterRelationActivity.class);
+        resultIntent.putExtra("id", characterId);
+        startActivity(resultIntent);
+    }
+
+    private void updateItemAtPosition(int position) {
 
         String id = String.valueOf(characterAdapter.getItem(position).getId());
 
@@ -119,7 +134,7 @@ public class CharacterFragment extends Fragment {
         startActivity(resultIntent);
     }
 
-    private void attemptToDeleteItemAtPosition (int position) {
+    private void attemptToDeleteItemAtPosition(int position) {
 
         Character characterToDelete = characterAdapter.getItem(position);
         String relatedCharacter = validateIfCharacterIsRelatedToAnotherCharacter(
@@ -168,6 +183,40 @@ public class CharacterFragment extends Fragment {
         alert.show();
     }
 
+    private void alertThatThereIsNoProfessionCreated() {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+
+        alert.setTitle("Relaciones Dependientes");
+        alert.setMessage("No se puede crear un nuevo Personaje sin haber creado al menos un Oficio");
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alert.show();
+    }
+
+    private void alertThatThereIsNoSettlementCreated() {
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+
+        alert.setTitle("Relaciones Dependientes");
+        alert.setMessage("No se puede crear un nuevo Personaje sin haber creado al menos un Asentamiento");
+
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alert.show();
+    }
+
     private void alertThatCharacterIsRelated(
             final String characterName,
             final String relatedCharacterName) {
@@ -198,39 +247,22 @@ public class CharacterFragment extends Fragment {
         onResume();
     }
 
-    public void relateItemAtPosition(int position) {
-
-        String id = String.valueOf(characterAdapter.getItem(position).getId());
-
-        Intent resultIntent = new Intent(getActivity(), CharacterRelationActivity.class);
-        resultIntent.putExtra("id", id);
-        startActivity(resultIntent);
-    }
-
     private boolean validateIfThereIsAnySettlement() {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
-
-        return rma.getDB().dbCheckIfThereIsAnySettlement();
+        return rma.getDB().dbCheckIfThereIsAnySettlementByCampaign(String.valueOf(rma.getSelectedCampaign().getId()));
     }
 
     private boolean validateIfThereIsAnyProfession() {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
-
-        return rma.getDB().dbCheckIfThereIsAnyProfession();
+        return rma.getDB().dbCheckIfThereIsAnyProfessionByCampaign(String.valueOf(rma.getSelectedCampaign().getId()));
     }
 
-    public boolean validateIfThereIsAnyOtherCharacter(String id) {
+    private boolean validateIfThereIsAnyOtherCharacter(String id) {
 
-        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
-
-        return rma.getDB().dbCheckIfThereIsAnyOtherCharacter(id);
+        return rma.getDB().dbCheckIfThereIsAnyOtherCharacterByCampaign(id, String.valueOf(rma.getSelectedCampaign().getId()));
     }
 
-    public String validateIfCharacterIsRelatedToAnotherCharacter(String id) {
-
-        RoleManagementApplication rma = (RoleManagementApplication)getActivity().getApplicationContext();
+    private String validateIfCharacterIsRelatedToAnotherCharacter(String id) {
 
         return rma.getDB().dbCheckIfCharacterIsRelatedToAnotherCharacter(id);
     }
