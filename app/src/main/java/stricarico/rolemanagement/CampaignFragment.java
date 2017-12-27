@@ -139,6 +139,7 @@ public class CampaignFragment extends Fragment {
 
     private void deleteCampaignById(String tableName, String id) {
 
+        rma.deleteSelectedCampaignSharedPreferences();
         rma.getDB().dbDeleteById(tableName, id);
 
         onResume();

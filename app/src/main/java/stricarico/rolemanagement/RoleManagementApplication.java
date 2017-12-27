@@ -47,6 +47,11 @@ public class RoleManagementApplication extends Application {
         getMySharedPreferences().setLongValue("selectedCampaign", selectedCampaignId);
     }
 
+    public void deleteSelectedCampaignSharedPreferences() {
+
+        getMySharedPreferences().removeKey("selectedCampaign");
+    }
+
     public boolean checkIfSharedPreferencesContainsKey(String key) {
 
         if (getMySharedPreferences().containsKey(key))

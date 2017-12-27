@@ -124,7 +124,21 @@ public class ProfessionActivity extends AppCompatActivity {
             return false;
         }
 
+        if (professionNameAlreadyExists()) {
+            Toast.makeText(this, "Ya existe un Oficio con el nombre "
+                    + etName.getText().toString(), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
+    }
+
+    private boolean professionNameAlreadyExists() {
+
+        return rma.getDB().dbCheckIfProfessionNameByCampaignAlreadyExists(
+                etName.getText().toString(),
+                String.valueOf(rma.getSelectedCampaign().getId())
+        );
     }
 
 }

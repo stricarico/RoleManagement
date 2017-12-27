@@ -107,6 +107,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return listItems;
     }
 
+    public boolean dbCheckIfCampaignNameAlreadyExists(String name) {
+
+        String query = "SELECT * FROM CAMPAIGN WHERE NAME='" + name + "'";
+        Cursor cursor = this.getDb().rawQuery(query, new String[]{});
+
+        if (cursor.moveToNext()) return true;
+        else return false;
+    }
+
     public Character dbSelectCharacterById(String id) {
 
         String query = "SELECT * FROM CHARACTER WHERE ID=" + id;
@@ -355,6 +364,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else return false;
     }
 
+    public boolean dbCheckIfSettlementNameByCampaignAlreadyExists(String name, String campaignId) {
+
+        String query = "SELECT * FROM SETTLEMENT WHERE NAME='" + name + "' AND CAMPAIGN_ID=" + campaignId;
+        Cursor cursor = this.getDb().rawQuery(query, new String[]{});
+
+        if (cursor.moveToNext()) return true;
+        else return false;
+    }
+
     public Profession dbSelectProfessionById(String id) {
 
         String query = "SELECT * FROM PROFESSION WHERE ID=" + id;
@@ -422,6 +440,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToNext()) {
             return true;
         }
+        else return false;
+    }
+
+    public boolean dbCheckIfProfessionNameByCampaignAlreadyExists(String name, String campaignId) {
+
+        String query = "SELECT * FROM PROFESSION WHERE NAME='" + name + "' AND CAMPAIGN_ID=" + campaignId;
+        Cursor cursor = this.getDb().rawQuery(query, new String[]{});
+
+        if (cursor.moveToNext()) return true;
         else return false;
     }
 }

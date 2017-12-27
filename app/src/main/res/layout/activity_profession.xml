@@ -21,11 +21,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="text"
+                android:inputType="textCapWords"
                 android:hint="@string/profession_name"
-                android:layout_marginBottom="20dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+                android:layout_marginBottom="20dp" />
 
             <EditText
                 android:id="@+id/duties"
@@ -33,15 +31,12 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:hint="@string/profession_duties"
-                android:layout_below="@id/name"
-                android:layout_alignParentStart="true" />
+                android:hint="@string/profession_duties" />
 
             <Button
                 android:id="@+id/insertButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="75dp"
                 android:text="@string/insert_button" />

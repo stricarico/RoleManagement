@@ -144,7 +144,21 @@ public class SettlementActivity extends AppCompatActivity {
             return false;
         }
 
+        if (settlementNameAlreadyExists()) {
+            Toast.makeText(this, "Ya existe un Asentamiento con el nombre "
+                    + etName.getText().toString(), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
+    }
+
+    private boolean settlementNameAlreadyExists() {
+
+        return rma.getDB().dbCheckIfSettlementNameByCampaignAlreadyExists(
+                etName.getText().toString(),
+                String.valueOf(rma.getSelectedCampaign().getId())
+        );
     }
 
 }

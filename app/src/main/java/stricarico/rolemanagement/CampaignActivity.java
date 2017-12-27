@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import static stricarico.rolemanagement.MainActivity.rma;
+
 public class CampaignActivity extends AppCompatActivity {
 
     private static Bundle bundle;
@@ -100,7 +102,20 @@ public class CampaignActivity extends AppCompatActivity {
             return false;
         }
 
+        if (campaignNameAlreadyExists()) {
+            Toast.makeText(this, "Ya existe una Campaña con el nombre "
+                    + etName.getText().toString(), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
+    }
+
+    private boolean campaignNameAlreadyExists() {
+
+        return rma.getDB().dbCheckIfCampaignNameAlreadyExists(
+                etName.getText().toString()
+        );
     }
 
 }
